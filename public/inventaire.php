@@ -13,10 +13,10 @@
 <body>
     <div class="bg-light">
         <header class="bg-white border-bottom">
-            <nav class="container navbar navbar-expand-lg navbar-light py-3">
+            <nav class="container navbar navbar-expand-lg navbar-light py-4">
                 <div class="container-fluid px-0">
                     <a class="navbar-logo me-4" href="#">
-                        <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="img-fluid" style="max-width: 150px; height: auto;">
+                        <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="img-fluid" style="max-width: 200px; height: auto;">
                     </a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
                         <ul class="navbar-nav ms-auto align-items-center">
                             <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                                 <a href="#" class="btn btn-outline-secondary btn-sm">
-                                    PROFIL
+                                    <i class="bi bi-person-fill"></i> PROFIL
                                 </a>
                             </li>
                         </ul>
