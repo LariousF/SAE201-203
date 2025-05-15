@@ -5,6 +5,10 @@ body {
     flex-direction: column;
 }
 
+.banner{
+    background-color:#2A5D90
+}
+
 .category-card {
     min-height: 320px;
     transition: transform 0.3s ease-in-out;
@@ -44,4 +48,28 @@ main {
 
 footer {
     margin-top: auto;
+}
+
+.bg-iut-blue {
+    background-color: #2A5D90;
+}
+.profile-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: white;
+    margin: 0 auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-circle img {
+    width: 100%;
+    height: auto;
+}
+.info-box {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin-bottom: 20px;
 }
