@@ -1,5 +1,6 @@
 <?php
-require_once 'src/config/dbconnect.php';
+require_once 'src/config/db_connect.php';
+require_once 'src/model/authentification.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,11 +34,13 @@ require_once 'src/config/dbconnect.php';
                                     <i class="bi bi-person-fill"></i> PROFIL
                                 </a>
                             </li>
-                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                    <i class="bi bi-person-fill"></i> Tableau de bord Admin
-                                </a>
-                            </li>
+                            <?php if ($userRole === 'Admin'): ?>
+                                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                    <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
+                                        <i class="bi bi-person-fill"></i> Tableau de bord Admin
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>
