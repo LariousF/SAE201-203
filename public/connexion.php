@@ -21,11 +21,11 @@
         <form>
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Entrez votre email">
+                <input type="email" class="form-control" id="email" placeholder="Veuillez entrez votre email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe">
+                <input type="password" class="form-control" id="password" placeholder="Veuillez entrez votre mot de passe"  required>
             </div>
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary">Se connecter</button>
@@ -33,8 +33,21 @@
         </form>
     </div>
 
-
-
+    <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Recupere les values du formulaire
+            $email = isset($_POST['email']);
+            $password = isset($_POST['password']);
+            
+            $stmt = $pdo->prepare ("SELECT ID_Utilisateur, Email, Pseudo, Nom, Prénom, Mot_de_passe")
+        
+        }
+        
+    
+    
+    
+    
+    ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
