@@ -1,8 +1,6 @@
-
-<?php
-require_once 'src/config/db_connect.php';
-require_once 'src/model/authentification.php';
+<?php 
 require_once '../src/config/db_connect.php';
+require_once '../src/model/authentification.php';
 
 session_start();
 
