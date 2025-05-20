@@ -1,9 +1,7 @@
-<<<<<<< HEAD
+
 <?php
 require_once 'src/config/db_connect.php';
 require_once 'src/model/authentification.php';
-=======
-<?php 
 require_once '../src/config/db_connect.php';
 
 session_start();
@@ -42,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Veuillez remplir tous les champs";
     }
 }
->>>>>>> 31ee146134b0e95340828209a0bcd3e07cea3924
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -79,23 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </form>
-
-    <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Recupere les values du formulaire
-            $email = isset($_POST['email']);
-            $password = isset($_POST['password']);
-            
-            $stmt = $pdo->prepare ("SELECT ID_Utilisateur, Email, Pseudo, Nom, Prénom, Mot_de_passe")
-        
-        }
-        
-    
-    
-    
-    
-    ?>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
