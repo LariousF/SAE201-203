@@ -76,21 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
     </div>
 
-    <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Recupere les values du formulaire
-            $email = isset($_POST['email']);
-            $password = isset($_POST['password']);
-            
-            $stmt = $pdo->prepare ("SELECT ID_Utilisateur, Email, Pseudo, Nom, Prénom, Mot_de_passe")
-        
-        }
-        
-    
-    
-    
-    
-    ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
