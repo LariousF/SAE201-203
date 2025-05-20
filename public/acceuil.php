@@ -1,3 +1,6 @@
+<?php
+require_once 'src/config/dbconnect.php';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

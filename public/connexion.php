@@ -1,5 +1,5 @@
 <?php
-// Page de connexion
+require_once 'src/config/dbconnect.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">

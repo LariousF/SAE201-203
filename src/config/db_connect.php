@@ -1,7 +1,6 @@
 <?php
-
 $db_host = 'localhost';         // Hôte de la base de données
-$db_name = 'mmi_reservations';  // Nom de votre base de données
+$db_name = 'mmi_reservations';  // Nom de la base de données
 $db_user = 'root';              // Nom d'utilisateur
 $db_pass = '';                  // Mot de passe
 $db_charset = 'utf8mb4';        // Encodage
@@ -16,10 +15,10 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $db_user, $db_pass, $options);
-    echo "Connexion à la base de données '$db_name' réussie.";
-
 } catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
+    if (defined('DEV_MODE') && DEV_MODE === true) {
+        die('Erreur de connexion : ' . $e->getMessage());
+    } else {
+        die('Impossible de se connecter à la base de données. Veuillez contacter l\'administrateur.');
+    }
 }
-
-?>
