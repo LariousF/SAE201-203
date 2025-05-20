@@ -13,9 +13,10 @@
     
 </head>
 <body>
+    <img class="w-25" src="./images/logo_univ_gustave_eiffel.png">
     <div class="blue-bar"></div>
     
-    <div class="form_container bg-white p-4 rounded shadow-sm">
+    <div class="form_container p-4 rounded shadow-sm">
         <h1 class="text-center mb-4">Connexion</h1>
         <form>
             <div class="mb-3">
@@ -31,6 +32,7 @@
             </div>
         </form>
     </div>
+
 
 
 
