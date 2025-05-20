@@ -1,9 +1,7 @@
-<<<<<<< HEAD
+
 <?php
 require_once 'src/config/db_connect.php';
 require_once 'src/model/authentification.php';
-=======
-<?php 
 require_once '../src/config/db_connect.php';
 
 session_start();
@@ -42,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Veuillez remplir tous les champs";
     }
 }
->>>>>>> 31ee146134b0e95340828209a0bcd3e07cea3924
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -53,10 +50,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Page de Connexion</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/connexion.css">
-    
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <img class="w-25" src="./images/logo_univ_gustave_eiffel.png">
+    <img class="w-25" src="./images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel">
     <div class="blue-bar"></div>
     
     <div class="form_container p-4 rounded shadow-sm">
@@ -70,13 +67,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password" class="form-label">Mot de passe</label>
                 <input type="password" class="form-control" id="password" placeholder="Veuillez entrez votre mot de passe"  required>
             </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Se connecter</button>
+            <div class="row">
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                </div>
+                <div class="col-6">
+                    <button href="inscription.php" class="btn btn-outline-secondary w-100">S'inscrire</button>
+                </div>
             </div>
         </form>
     </div>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
