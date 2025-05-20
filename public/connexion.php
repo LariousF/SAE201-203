@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 </head>
 <body>
-    <img class="w-25" src="./images/logo_univ_gustave_eiffel.png">
+    <img class="w-25" src="./images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel">
     <div class="blue-bar"></div>
     
     <div class="form_container p-4 rounded shadow-sm">
@@ -64,11 +64,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password" class="form-label">Mot de passe</label>
                 <input type="password" class="form-control" id="password" placeholder="Veuillez entrez votre mot de passe"  required>
             </div>
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Se connecter</button>
+            <div class="row">
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                </div>
+                <div class="col-6">
+                    <button href="inscription.php" class="btn btn-outline-secondary w-100">S'inscrire</button>
+                </div>
             </div>
         </form>
-    </div>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
