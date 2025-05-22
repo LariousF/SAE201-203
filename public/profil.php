@@ -1,6 +1,6 @@
 <?php
-require_once 'src/config/db_connect.php';
-require_once 'src/model/authentification.php';
+require_once '../src/model/db_connect.php';
+require_once '../src/model/authentification.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,7 +19,7 @@ require_once 'src/model/authentification.php';
     <header class="bg-white border-bottom">
             <nav class="container navbar navbar-expand-lg navbar-light py-4">
                 <div class="container-fluid px-0">
-                    <a class="navbar-logo me-4" href="acceuil.php">
+                    <a class="navbar-logo me-4" href="accueil.php">
                         <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="img-fluid" style="max-width: 200px; height: auto;">
                     </a>
 
@@ -45,15 +45,15 @@ require_once 'src/model/authentification.php';
                     </div>
                 </div>
             </nav>
-        </header>
+    </header>
 
-        <main class="flex-grow-1">
+    <main class="flex-grow-1">
             <section class="bg-iut-blue text-white py-4">
                 <div class="container py-3">
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center">
                             <div class="profile-circle mb-3">
-                                <img src="images/avatar-celena.png" alt="Avatar Celena" class="img-fluid">
+                                <img src="#" alt="Avatar" class="img-fluid">
                             </div>
                         </div>
                         <div class="col-md-9 text-md-start text-center">
@@ -87,10 +87,10 @@ require_once 'src/model/authentification.php';
                                 </div>
                             </div>
                         </div>
-
-                        <footer class="bg-white pt-5 pb-4">
-            <div class="container">
-                <div class="row g-4">
+    </main>
+    <footer class="bg-white pt-5 pb-4">
+        <div class="container">
+            <div class="row g-4">
                     <div class="col-lg-3 col-md-6">
                         <h5>Qui sommes nous ?</h5>
                         <p>Université Gustave Eiffel<br>
@@ -110,15 +110,15 @@ require_once 'src/model/authentification.php';
                         Email: cipen@univ-eiffel.fr</p>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <h5>Suivez nous</h5>
-                        <div class="d-flex gap-3">
-                            <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
-                            <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
-                        </div>
+                    <h5>Suivez nous</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
                     </div>
-                </div>
+                    </div>
             </div>
-        </footer>
+        </div>
+    </footer>
 </body>
 </html>

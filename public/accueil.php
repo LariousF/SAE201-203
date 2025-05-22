@@ -1,6 +1,6 @@
 <?php
-require_once 'src/config/db_connect.php';
-require_once 'src/model/authentification.php';
+require_once '../src/model/db_connect.php';
+require_once '../src/model/authentification.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
