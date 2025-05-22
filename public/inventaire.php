@@ -71,19 +71,19 @@ require_once 'src/model/authentification.php';
 
         <section class="py-5">
             <div class="container text-center">
-                 <div class="row justify-content-center g-4 pt-4"> <div class="col-12 col-sm-6 col-md-4">
-                        <a href="#" class="card category-card h-100 border">
-                            <div class="card-body text-center p-4">
-                                 <i class="bi bi-door-open card-icon mb-3"></i>
-                                <h3 class="card-title h5">Salles</h3>
-                            </div>
-                        </a>
-                    </div>
+                <div class="row justify-content-center g-4 pt-4"> <div class="col-12 col-sm-6 col-md-4">
+                    <a href="#" class="card category-card h-100 border">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-door-open card-icon mb-3"></i>
+                            <h3 class="card-title h5">Salles</h3>
+                        </div>
+                    </a>
+                </div>
 
                     <div class="col-12 col-sm-6 col-md-4">
-                         <a href="#" class="card category-card h-100 border">
-                             <div class="card-body text-center p-4">
-                                 <i class="bi bi-headset-vr card-icon mb-3"></i>
+                        <a href="#" class="card category-card h-100 border">
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-headset-vr card-icon mb-3"></i>
                                 <h3 class="card-title h5">Matériel VR</h3>
                             </div>
                         </a>
@@ -91,8 +91,8 @@ require_once 'src/model/authentification.php';
 
                     <div class="col-12 col-sm-6 col-md-4">
                         <a href="#" class="card category-card h-100 border">
-                             <div class="card-body text-center p-4">
-                                 <i class="bi bi-box-seam card-icon mb-3"></i>
+                            <div class="card-body text-center p-4">
+                                <i class="bi bi-box-seam card-icon mb-3"></i>
                                 <h3 class="card-title h5">Matériaux</h3>
                             </div>
                         </a>
@@ -102,5 +102,5 @@ require_once 'src/model/authentification.php';
         </section>
     </main>
 
-     </body>
+    </body>
 </html>
