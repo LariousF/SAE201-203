@@ -1,6 +1,6 @@
 <?php
 require_once 'db_connect.php';
-
+    
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupération et validation
     $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         // Redirection vers la page de connexion après succès
-        header('Location: ../../public/login.php?message=inscription_reussie');
+        header('Location: ../public/connexion.php?message=inscription_reussie');
         exit;
 
     } catch (PDOException $e) {

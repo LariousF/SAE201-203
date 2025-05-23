@@ -78,7 +78,7 @@
         <div class="col-md-6 bg-white p-4 rounded shadow-sm">
             <h2 class="mb-4 text-center">Créer un compte</h2>
             <div class="background-band"></div>
-            <form method="POST" action="../src/config/inscription_bdd.php">
+            <form method="POST" action="../src/model/inscription_bdd.php">
                 <div class="mb-3">
                     <label for="email" class="form-label">Adresse email</label>
                     <input type="email" name="email" id="email" class="form-control" placeholder="nom@exemple.com" required>

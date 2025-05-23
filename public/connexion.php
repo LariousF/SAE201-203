@@ -2,7 +2,7 @@
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
 
-session_start();
+
 
 $message = '';
 
@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button type="submit" class="btn btn-primary w-100">Se connecter</button>
                 </div>
                 <div class="col-6">
-                    <button href="inscription.php" class="btn btn-outline-secondary w-100">S'inscrire</button>
+                    <a href="inscription.php" class="btn btn-outline-secondary w-100">S'inscrire</a>
                 </div>
             </div>
         </form>

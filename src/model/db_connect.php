@@ -1,4 +1,5 @@
 <?php
+session_start ();
 $db_host = 'localhost';         // Hôte de la base de données
 $db_name = 'mmi_reservations';  // Nom de la base de données
 $db_user = 'root';              // Nom d'utilisateur

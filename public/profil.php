@@ -1,6 +1,19 @@
 <?php
+session_start()
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
+
+ if (!$isLoggedIn) {
+     header('Location: connexion.php');
+     exit;
+ }
+ $stmt = $pdo->prepare("SELECT u.*, e.Numero_etudiant, e.Promotion
+                       FROM Utilisateur u
+                       LEFT JOIN Etudiant e ON u.ID_Utilisateur = e.ID_Utilisateur
+                       WHERE u.ID_Utilisateur = ?");
+ $stmt->execute([$userId]);
+ $userData = $stmt->fetch();
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,7 +32,7 @@ require_once '../src/model/authentification.php';
     <header class="bg-white border-bottom">
             <nav class="container navbar navbar-expand-lg navbar-light py-4">
                 <div class="container-fluid px-0">
-                    <a class="navbar-logo me-4" href="accueil.php">
+                    <a class="navbar-logo me-4" href="index.php">
                         <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="img-fluid" style="max-width: 200px; height: auto;">
                     </a>
 
@@ -29,18 +42,17 @@ require_once '../src/model/authentification.php';
 
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto align-items-center">
-                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                <a href="profil.php" class="btn btn-outline-secondary btn-sm">
-                                    <i class="bi bi-person-fill"></i> PROFIL
-                                </a>
-                            </li>
-                            <?php if ($userRole === 'Admin'): ?>
+                            <?php if (isset($userRole) && $userRole === 'Admin'): ?>
                                 <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                                     <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                        <i class="bi bi-person-fill"></i> Tableau de bord Admin
-                                    </a>
+                                        <i class="bi bi-gear-fill"></i> Tableau de bord Admin </a>
                                 </li>
                             <?php endif; ?>
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                <a href="logout.php" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-box-arrow-right"></i> DÉCONNEXION
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
