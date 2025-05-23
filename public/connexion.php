@@ -2,8 +2,6 @@
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
 
-
-
 $message = '';
 
 //Traitement du formulaire
@@ -26,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['email'] = $utilisateur['Email'];
                 
                 //Redirige vers la page accueil
-                header("Location: accueil.php");
+                header("Location: index.php");
                 exit;
             } else {
                 $message = "Email ou mot de passe incorrect";
@@ -56,14 +54,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     <div class="form_container p-4 rounded shadow-sm">
         <h1 class="text-center mb-4">Connexion</h1>
-        <form>
+        <form method="POST" action="../src/model/connexion_bdd.php">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Veuillez entrez votre email" required>
+                <input type="email" class="form-control" name="email" placeholder="Veuillez entrez votre email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password" placeholder="Veuillez entrez votre mot de passe"  required>
+                <input type="password" class="form-control" name="password" placeholder="Veuillez entrez votre mot de passe"  required>
             </div>
             <div class="row">
                 <div class="col-6">

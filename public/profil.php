@@ -1,5 +1,5 @@
 <?php
-session_start()
+session_start();
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
 

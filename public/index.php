@@ -2,10 +2,6 @@
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
 
-if (!$isLoggedIn) {
-    header('Location: connexion.php');
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -15,7 +15,7 @@ session_start();
 
 <div class="container">
     <div class="logo-container mt-4">
-         <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="logo-img">
+        <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="logo-img">
     </div>
 
     <div class="inscription-form-container">
@@ -60,7 +60,7 @@ session_start();
                 <label for="mot_de_passe" class="form-label">Mot de passe</label>
                 <input type="password" name="mot_de_passe" id="mot_de_passe" class="form-control" required>
             </div>
-             <div class="mb-3">
+            <div class="mb-3">
                 <label for="confirm_mot_de_passe" class="form-label">Confirmer le mot de passe</label>
                 <input type="password" name="confirm_mot_de_passe" id="confirm_mot_de_passe" class="form-control" required>
             </div>
@@ -121,47 +121,6 @@ session_start();
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const roleSelect = document.getElementById('role');
-    const etudiantFields = document.getElementById('champsEtudiant');
-    const enseignantFields = document.getElementById('champsEnseignant');
-
-    const allSpecificFieldsContainers = [etudiantFields, enseignantFields];
-
-    function toggleFields() {
-        allSpecificFieldsContainers.forEach(container => {
-            if (container) {
-                container.style.display = 'none';
-                container.querySelectorAll('input, select, textarea').forEach(input => {
-                    input.required = false;
-                });
-            }
-        });
-
-        const selectedRole = roleSelect.value;
-        let currentFieldsContainer = null;
-
-        if (selectedRole === 'Etudiant') {
-            currentFieldsContainer = etudiantFields;
-        } else if (selectedRole === 'Enseignant') {
-            currentFieldsContainer = enseignantFields;
-        }
-
-        if (currentFieldsContainer) {
-            currentFieldsContainer.style.display = 'block';
-            currentFieldsContainer.querySelectorAll('input, select, textarea').forEach(input => {
-                input.required = true;
-            });
-        }
-    }
-
-    if (roleSelect) {
-        roleSelect.addEventListener('change', toggleFields);
-        toggleFields();
-    }
-});
-</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
