@@ -1,33 +1,94 @@
 <?php
+session_start();
 require_once 'db_connect.php';
-    
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupération et validation
-    $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-    $pseudo = trim($_POST['pseudo']);
-    $nom = trim($_POST['nom']);
-    $prenom = trim($_POST['prenom']);
-    $mot_de_passe = $_POST['mot_de_passe'];
-    $date_naissance = $_POST['date_naissance'] ?? null;
-    $adresse_postale = trim($_POST['adresse_postale']);
-    $role = 'Etudiant'; // valeur par défaut
 
-    // Vérification de champs
-    if (!$email || empty($pseudo) || empty($nom) || empty($prenom) || empty($mot_de_passe)) {
-        die('Veuillez remplir tous les champs obligatoires et fournir un email valide.');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
+    $pseudo = trim($_POST['pseudo'] ?? '');
+    $nom = trim($_POST['nom'] ?? '');
+    $prenom = trim($_POST['prenom'] ?? '');
+    $mot_de_passe = $_POST['mot_de_passe'] ?? '';
+    $confirm_mot_de_passe = $_POST['confirm_mot_de_passe'] ?? '';
+    $date_naissance_str = $_POST['date_naissance'] ?? '';
+    $adresse_postale = trim($_POST['adresse_postale'] ?? '');
+    $role = trim($_POST['role'] ?? '');
+
+    $errors = [];
+    if (!$email) {
+        $errors[] = "L'adresse email n'est pas valide.";
+    }
+    if (empty($pseudo)) { $errors[] = "Le pseudo est requis."; }
+    if (empty($nom)) { $errors[] = "Le nom est requis."; }
+    if (empty($prenom)) { $errors[] = "Le prénom est requis."; }
+    if (empty($date_naissance_str)) { $errors[] = "La date de naissance est requise."; }
+    if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $date_naissance_str) && !empty($date_naissance_str)) {
+        $errors[] = "Le format de la date de naissance n'est pas valide (AAAA-MM-JJ).";
+    } else {
+        $date_naissance = $date_naissance_str;
     }
 
-    // Hachage du mot de passe
+    if (empty($adresse_postale)) { $errors[] = "L'adresse postale est requise."; }
+    if (empty($role) || !in_array($role, ['Etudiant', 'Enseignant', 'Administrateur', 'Agent'])) {
+        $errors[] = "Veuillez sélectionner un rôle valide.";
+    }
+    if (empty($mot_de_passe)) {
+        $errors[] = "Le mot de passe est requis.";
+    } elseif (strlen($mot_de_passe) < 6) {
+        $errors[] = "Le mot de passe doit contenir au moins 6 caractères.";
+    }
+    if ($mot_de_passe !== $confirm_mot_de_passe) {
+        $errors[] = "Les mots de passe ne correspondent pas.";
+    }
+
+    $specific_fields_valid = true;
+    switch ($role) {
+        case 'Etudiant':
+            $numero_etudiant = trim($_POST['numero_etudiant'] ?? '');
+            $promotion = trim($_POST['promotion'] ?? '');
+            $td = trim($_POST['td'] ?? '');
+            $tp = trim($_POST['tp'] ?? '');
+            if (empty($numero_etudiant)) { $errors[] = "Le numéro étudiant est requis."; $specific_fields_valid = false;}
+            if (empty($promotion)) { $errors[] = "La promotion est requise."; $specific_fields_valid = false;}
+            if (empty($td)) { $errors[] = "Le groupe TD est requis."; $specific_fields_valid = false;}
+            if (empty($tp)) { $errors[] = "Le groupe TP est requis."; $specific_fields_valid = false;}
+            break;
+        case 'Enseignant':
+            $qualification = trim($_POST['qualification'] ?? '');
+            $fonction = trim($_POST['fonction'] ?? '');
+            if (empty($qualification)) { $errors[] = "La qualification est requise."; $specific_fields_valid = false;}
+            if (empty($fonction)) { $errors[] = "La fonction est requise."; $specific_fields_valid = false;}
+            break;
+        case 'Administrateur':
+            $bureau = trim($_POST['bureau'] ?? '');
+            $telephone_pro = trim($_POST['telephone_pro'] ?? '');
+            if (empty($bureau)) { $errors[] = "Le bureau est requis."; $specific_fields_valid = false;}
+            if (empty($telephone_pro)) { $errors[] = "Le téléphone professionnel est requis."; $specific_fields_valid = false;}
+            break;
+        case 'Agent':
+            break;
+    }
+
+    if (!empty($errors)) {
+        $_SESSION['form_message'] = implode("<br>", $errors);
+        $_SESSION['form_message_type'] = 'danger';
+        header('Location: ../../public/inscription.php');
+        exit;
+    }
+
     $hash_password = password_hash($mot_de_passe, PASSWORD_DEFAULT);
 
-    // Requête préparée
-    $sql = "INSERT INTO utilisateur (Email, Pseudo, Nom, Prenom, Mot_de_passe, Date_Naissance, Adresse_Postale, Role)
-            VALUES (:email, :pseudo, :nom, :prenom, :mot_de_passe, :date_naissance, :adresse_postale, :role)";
-    
-    $stmt = $pdo->prepare($sql);
-
     try {
-        $stmt->execute([
+        $pdo->beginTransaction();
+
+        $sqlUser = "INSERT INTO Utilisateur (Email, Pseudo, Nom, Prenom, Mot_de_passe, Date_Naissance, Adresse_Postale, Role, Est_Actif)
+                    VALUES (:email, :pseudo, :nom, :prenom, :mot_de_passe, :date_naissance, :adresse_postale, :role, TRUE)";
+        
+        $stmtUser = $pdo->prepare($sqlUser);
+        $stmtUser->execute([
             ':email' => $email,
             ':pseudo' => $pseudo,
             ':nom' => $nom,
@@ -38,17 +99,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':role' => $role,
         ]);
 
-        // Redirection vers la page de connexion après succès
-        header('Location: ../public/connexion.php?message=inscription_reussie');
+        $id_utilisateur = $pdo->lastInsertId();
+
+        switch ($role) {
+            case 'Etudiant':
+                $sqlRole = "INSERT INTO Etudiant (ID_Utilisateur, Numero_etudiant, Promotion, TD, TP) VALUES (:id_utilisateur, :num_etudiant, :promo, :td, :tp)";
+                $stmtRole = $pdo->prepare($sqlRole);
+                $stmtRole->execute([
+                    ':id_utilisateur' => $id_utilisateur,
+                    ':num_etudiant' => $numero_etudiant,
+                    ':promo' => $promotion,
+                    ':td' => $td,
+                    ':tp' => $tp
+                ]);
+                break;
+            case 'Enseignant':
+                $sqlRole = "INSERT INTO Enseignant (ID_Utilisateur, Qualification, Fonction) VALUES (:id_utilisateur, :qualification, :fonction)";
+                $stmtRole = $pdo->prepare($sqlRole);
+                $stmtRole->execute([
+                    ':id_utilisateur' => $id_utilisateur,
+                    ':qualification' => $qualification,
+                    ':fonction' => $fonction
+                ]);
+                break;
+            case 'Administrateur':
+                $sqlRole = "INSERT INTO Administrateur (ID_Utilisateur, Bureau, Telephone_pro) VALUES (:id_utilisateur, :bureau, :tel_pro)";
+                $stmtRole = $pdo->prepare($sqlRole);
+                $stmtRole->execute([
+                    ':id_utilisateur' => $id_utilisateur,
+                    ':bureau' => $bureau,
+                    ':tel_pro' => $telephone_pro
+                ]);
+                break;
+            case 'Agent':
+                $sqlRole = "INSERT INTO Agent (ID_Utilisateur) VALUES (:id_utilisateur)";
+                $stmtRole = $pdo->prepare($sqlRole);
+                $stmtRole->execute([':id_utilisateur' => $id_utilisateur]);
+                break;
+        }
+
+        $pdo->commit();
+
+        $_SESSION['form_message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
+        $_SESSION['form_message_type'] = 'success';
+        header('Location: ../../public/connexion.php');
         exit;
 
     } catch (PDOException $e) {
+        $pdo->rollBack();
         if ($e->errorInfo[1] == 1062) {
-            die("Erreur : cet email ou pseudo est déjà utilisé.");
+             $_SESSION['form_message'] = "Erreur : cet email ou pseudo est déjà utilisé.";
         } else {
-            die("Erreur lors de l'inscription : " . $e->getMessage());
+             $_SESSION['form_message'] = "Erreur lors de l'inscription : " . $e->getMessage();
         }
+        $_SESSION['form_message_type'] = 'danger';
+        header('Location: ../../public/inscription.php');
+        exit;
     }
 } else {
-    die("Méthode non autorisée.");
+    $_SESSION['form_message'] = "Méthode non autorisée pour accéder à cette page.";
+    $_SESSION['form_message_type'] = 'warning';
+    header('Location: ../../public/inscription.php');
+    exit;
 }
+?>
