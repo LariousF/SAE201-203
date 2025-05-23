@@ -59,7 +59,8 @@ footer {
 	height: 150px;
 	border-radius: 50%;
 	background-color: white;
-	margin: 0 auto;
+	position:absolute;
+	margin:auto;
 	overflow: hidden;
 	display: flex;
 	align-items: center;

@@ -1,7 +1,5 @@
 <?php
-require_once 'src/config/dbconnect.php';
-
-session_start();
+require_once 'db_connect.php';
 
 $userId = null;
 $userRole = null;
