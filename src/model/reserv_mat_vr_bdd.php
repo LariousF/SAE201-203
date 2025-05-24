@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 0); // Désactiver l'affichage des erreurs
-
 require_once 'connexion_bdd.php';
 require_once 'authentification.php';
 

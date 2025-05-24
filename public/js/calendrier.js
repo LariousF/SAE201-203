@@ -232,24 +232,14 @@ function changeMonth(delta) {
     updateCalendar();
 }
 
-function debug(message) {
-    console.log(message);
-    const debugDiv = document.getElementById('debug');
-    if (debugDiv) {
-        debugDiv.textContent += message + '\n';
-    }
-}
-
 async function confirmerReservation() {
-    debug('Début de la fonction confirmerReservation');
-    
     if (!selectedDate || startTime === null || endTime === null) {
         document.getElementById('message').textContent = "Veuillez sélectionner une date et une plage horaire";
         return;
     }
 
     // Convertir les pourcentages en heures et minutes
-    const minutesStart = (startTime / 100) * (11.25 * 60); // 11.25 heures au total
+    const minutesStart = (startTime / 100) * (11.25 * 60);
     const minutesEnd = (endTime / 100) * (11.25 * 60);
     
     // Calculer les heures et minutes de début
@@ -264,8 +254,6 @@ async function confirmerReservation() {
     const finalEndHour = Math.min(19, endHour);
     const finalEndMinutes = finalEndHour === 19 ? Math.min(15, endMinutes) : endMinutes;
 
-    debug(`Heures calculées : ${startHour}:${startMinutes} - ${finalEndHour}:${finalEndMinutes}`);
-
     const formData = new FormData();
     formData.append('item_name', itemName);
     formData.append('item_type', itemType);
@@ -274,20 +262,13 @@ async function confirmerReservation() {
     formData.append('heure_debut', `${String(startHour).padStart(2, '0')}:${String(startMinutes).padStart(2, '0')}`);
     formData.append('heure_fin', `${String(finalEndHour).padStart(2, '0')}:${String(finalEndMinutes).padStart(2, '0')}`);
 
-    debug('Envoi de la requête...');
-    debug('URL: ../src/model/reserver.php');
-    debug('Données: ' + JSON.stringify(Object.fromEntries(formData)));
-
     try {
         const response = await fetch('../src/model/reserver.php', {
             method: 'POST',
             body: formData
         });
 
-        debug('Réponse reçue du serveur');
         const result = await response.json();
-        debug('Résultat: ' + JSON.stringify(result));
-
         const messageDiv = document.getElementById('message');
         
         if (result.success) {
@@ -303,7 +284,6 @@ async function confirmerReservation() {
             messageDiv.className = 'message error';
         }
     } catch (error) {
-        debug('Erreur: ' + error.message);
         const messageDiv = document.getElementById('message');
         messageDiv.textContent = "Une erreur est survenue lors de la communication avec le serveur";
         messageDiv.className = 'message error';

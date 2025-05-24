@@ -20,7 +20,7 @@ if ($auth->isLoggedIn()) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-
+    
     // Vérification de base
     if (!empty($email) && !empty($password)) {
         try {
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ");
             $stmt->execute([$email]);
             $utilisateur = $stmt->fetch();
-
+            
             // Vérification du mot de passe et du compte actif
             if ($utilisateur && password_verify($password, $utilisateur['Mot_de_passe'])) {
                 if (!$utilisateur['Est_Actif']) {
@@ -49,15 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $message_type = 'warning';
                 } else {
                     // Authentification réussie
-                    $_SESSION['user_id'] = $utilisateur['ID_Utilisateur'];
-                    $_SESSION['email'] = $utilisateur['Email'];
+                $_SESSION['user_id'] = $utilisateur['ID_Utilisateur'];
+                $_SESSION['email'] = $utilisateur['Email'];
                     $_SESSION['user_role'] = $utilisateur['Role_Effectif'];
                     $_SESSION['user_pseudo'] = $utilisateur['Pseudo'];
                     $_SESSION['user_nom'] = $utilisateur['Nom'];
                     $_SESSION['user_prenom'] = $utilisateur['Prenom'];
                     $_SESSION['est_actif'] = $utilisateur['Est_Actif'];
-                    header("Location: index.php");
-                    exit;
+                header("Location: index.php");
+                exit;
                 }
             } else {
                 $message = "Email ou mot de passe incorrect.";
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Page de Connexion</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/connexion.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <img class="w-25" src="./images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel">

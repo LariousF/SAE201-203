@@ -9,10 +9,6 @@ define('ROOT_PATH', dirname(__DIR__));
 require_once ROOT_PATH . '/src/model/db_connect.php';
 require_once ROOT_PATH . '/src/model/authentification.php';
 
-// Débogage - Afficher les informations de session
-error_log('Session ID: ' . session_id());
-error_log('Session data: ' . print_r($_SESSION, true));
-
 // Vérifier si l'utilisateur est connecté
 if (!$auth->isLoggedIn()) {
     $message = "Vous devez être connecté pour accéder à cette page.";

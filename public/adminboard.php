@@ -1,8 +1,4 @@
 <?php
-// Activer l'affichage des erreurs
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // Définir le chemin racine
 define('ROOT_PATH', dirname(__DIR__));
 

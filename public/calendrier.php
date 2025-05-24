@@ -143,7 +143,6 @@ try {
         </div>
 
         <div id="message" class="message"></div>
-        <div id="debug" style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; font-family: monospace; white-space: pre;"></div>
     </div>
 
     <script>

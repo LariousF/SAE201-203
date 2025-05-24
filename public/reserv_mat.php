@@ -48,13 +48,13 @@ ksort($materielsParCategorie);
                                 <i class="bi bi-person-fill"></i> PROFIL
                             </a>
                         </li>
-                        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-person-fill"></i> Tableau de bord Admin
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-person-fill"></i> Tableau de bord Admin
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
             </div>
         </nav>
     </header>
@@ -62,7 +62,7 @@ ksort($materielsParCategorie);
     <div class="container">
         <div class="bg-white rounded shadow p-4 my-4">
             <h1 class="text-center fw-bold mb-4">Réserver du matériel</h1>
-
+            
             <div class="d-flex justify-content-end mb-4">
                 <div class="input-group" style="max-width: 300px;">
                     <input type="text" class="form-control" id="searchInput" placeholder="Rechercher...">
@@ -78,16 +78,16 @@ ksort($materielsParCategorie);
                         <h3 class="mb-3"><?= htmlspecialchars($categorie) ?></h3>
                     </div>
                     <?php foreach ($materielsCategorie as $materiel): ?>
-                    <div class="col-lg-4 col-md-6 item-container">
+                <div class="col-lg-4 col-md-6 item-container">
                         <div class="card h-100 shadow-sm" data-item="<?= strtolower($materiel['Designation']) ?>" 
                              data-id="<?= $materiel['ID_Materiel'] ?>" role="button" tabindex="0">
-                            <div class="card-body text-center">
-                                <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                    <i class="fas fa-laptop equipment-icon text-white"></i>
-                                </div>
-                                <div class="bg-light rounded p-2">
+                        <div class="card-body text-center">
+                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
+                                <i class="fas fa-laptop equipment-icon text-white"></i>
+                            </div>
+                            <div class="bg-light rounded p-2">
                                     <span class="text-dark fw-medium"><?= htmlspecialchars($materiel['Designation']) ?></span>
-                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ ksort($materielsParCategorie);
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-
+    
     <script>
         const searchInput = document.getElementById('searchInput');
         const itemContainers = document.querySelectorAll('.item-container');
@@ -162,14 +162,14 @@ ksort($materielsParCategorie);
                     document.getElementById('equipmentCategory').textContent = materiel.Categorie;
                     document.getElementById('equipmentImage').src = getImageByCategory(materiel.Categorie);
                     document.getElementById('equipmentImage').alt = materiel.Designation;
-
-                    const reserveButton = document.getElementById('reserveButton');
-                    reserveButton.onclick = function() {
+                
+                const reserveButton = document.getElementById('reserveButton');
+                reserveButton.onclick = function() {
                         window.location.href = `calendrier.php?materiel_id=${materiel.ID_Materiel}`;
-                    };
-
-                    const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
-                    modal.show();
+                };
+                
+                const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
+                modal.show();
                 }
             });
 

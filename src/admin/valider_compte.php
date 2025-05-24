@@ -1,22 +1,4 @@
 <?php
-// Désactiver l'affichage des erreurs
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
-
-// Définir le gestionnaire d'erreurs
-function handleError($errno, $errstr, $errfile, $errline) {
-    echo "Erreur : " . $errstr;
-    exit;
-}
-set_error_handler('handleError');
-
-// Définir le gestionnaire d'exceptions
-function handleException($e) {
-    echo "Erreur : " . $e->getMessage();
-    exit;
-}
-set_exception_handler('handleException');
-
 // Démarrer la session si elle n'est pas déjà démarrée
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
