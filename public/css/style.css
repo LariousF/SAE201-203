@@ -136,7 +136,7 @@ footer {
 }
 
 .info-box strong {
-	color: var(--iut-dark-blue);
+	color: var(--iut-blue);
 	font-size: 0.9rem;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
@@ -155,7 +155,7 @@ footer {
 }
 
 .info-section-title {
-	color: var(--iut-dark-blue);
+	color: var(--iut-blue);
 	font-size: 1.2rem;
 	margin-bottom: 20px;
 	padding-bottom: 10px;
@@ -178,18 +178,18 @@ footer {
 }
 
 .status-badge.student {
-	background-color: #e3f2fd;
-	color: #1976d2;
+	background-color: #e8f0f7;
+	color: var(--iut-blue);
 }
 
 .status-badge.teacher {
-	background-color: #f3e5f5;
-	color: #7b1fa2;
+	background-color: #e8f0f7;
+	color: var(--iut-dark-blue);
 }
 
 .status-badge.admin {
-	background-color: #fff3e0;
-	color: #f57c00;
+	background-color: #e8f0f7;
+	color: var(--iut-blue);
 }
 
 .logo-container {
@@ -212,27 +212,26 @@ footer {
 	font-weight: 600;
 }
 .btn-custom-primary {
-	background-color: #2a5d90;
+	background-color: var(--iut-blue);
 	color: #fff;
 	border: none;
 }
 .btn-custom-primary:hover {
-	background-color: #1e4b75;
+	background-color: var(--iut-dark-blue);
 }
 .role-specific-fields {
-	display: none;
-	border-left: 3px solid #2a5d90;
+	border-left: 3px solid var(--iut-blue);
 	padding-left: 15px;
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
 
 .nav-pills .nav-link.active {
-	background-color: #0d6efd;
+	background-color: var(--iut-blue);
 	color: white;
 }
 .nav-pills .nav-link {
-	color: #0d6efd;
+	color: var(--iut-blue);
 }
 .table-responsive {
 	max-height: 400px;
@@ -252,9 +251,9 @@ footer {
 
 /* Couleurs personnalisées */
 :root {
-	--iut-blue: #004AAD;
-	--iut-light-blue: #0056cd;
-	--iut-dark-blue: #003c8a;
+	--iut-blue: #2a5d90;
+	--iut-light-blue: #3470ab;
+	--iut-dark-blue: #1e4b75;
 }
 
 /* Classes générales */
@@ -297,7 +296,7 @@ footer {
 }
 
 .info-box strong {
-	color: var(--iut-dark-blue);
+	color: var(--iut-blue);
 	font-size: 0.9rem;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
@@ -317,7 +316,7 @@ footer {
 }
 
 .info-section-title {
-	color: var(--iut-dark-blue);
+	color: var(--iut-blue);
 	font-size: 1.2rem;
 	margin-bottom: 20px;
 	padding-bottom: 10px;
@@ -341,18 +340,18 @@ footer {
 }
 
 .status-badge.student {
-	background-color: #e3f2fd;
-	color: #1976d2;
+	background-color: #e8f0f7;
+	color: var(--iut-blue);
 }
 
 .status-badge.teacher {
-	background-color: #f3e5f5;
-	color: #7b1fa2;
+	background-color: #e8f0f7;
+	color: var(--iut-dark-blue);
 }
 
 .status-badge.admin {
-	background-color: #fff3e0;
-	color: #f57c00;
+	background-color: #e8f0f7;
+	color: var(--iut-blue);
 }
 
 /* Responsive adjustments */

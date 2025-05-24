@@ -176,7 +176,7 @@ class Authentification {
 }
 
 // Créer une instance de la classe d'authentification
-$auth = new Authentification($pdo);
+$auth = new Authentification($connexion);
 
 // Fonction utilitaire pour vérifier les permissions
 function checkPermission($requiredRole = null) {

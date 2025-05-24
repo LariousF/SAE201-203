@@ -43,7 +43,7 @@ try {
                     $sql = "DELETE FROM Utilisateur WHERE ID_Utilisateur = ?";
                 }
                 
-                $stmt = $pdo->prepare($sql);
+                $stmt = $connexion->prepare($sql);
                 if ($stmt->execute([$id])) {
                     echo 'success';
                 } else {
@@ -72,7 +72,7 @@ try {
             WHERE u.Est_Actif = 0
             ORDER BY u.Date_Inscription DESC";
             
-    $stmt = $pdo->query($sql);
+    $stmt = $connexion->query($sql);
     $comptes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Générer le HTML pour le tableau

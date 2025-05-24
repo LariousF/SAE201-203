@@ -1,3 +1,10 @@
+<?php
+require_once '../src/model/connexion_bdd.php';
+require_once '../src/model/Materiel.php';
+
+$materielModel = new Materiel($connexion);
+$materielsVR = $materielModel->getMaterielVR();
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -55,109 +62,21 @@
             </div>
 
             <div class="row g-4" id="inventoryGrid">
+                <?php foreach ($materielsVR as $materiel): ?>
                 <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="casque vr oculus quest 2" role="button" tabindex="0">
+                    <div class="card h-100 shadow-sm" data-item="<?= strtolower($materiel['Designation']) ?>" 
+                         data-id="<?= $materiel['ID_Materiel'] ?>" role="button" tabindex="0">
                         <div class="card-body text-center">
                             <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
                                 <i class="fas fa-vr-cardboard equipment-icon text-white"></i>
                             </div>
                             <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Oculus Quest 2</span>
+                                <span class="text-dark fw-medium"><?= htmlspecialchars($materiel['Designation']) ?></span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="casque vr htc vive" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-vr-cardboard equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">HTC Vive</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="casque vr valve index" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-vr-cardboard equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Valve Index</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="contrôleurs vr oculus touch" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-hand-pointer equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Contrôleurs Oculus Touch</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="contrôleurs vr vive wand" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-hand-pointer equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Contrôleurs Vive Wand</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="base stations vr lighthouse" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-broadcast-tower equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Base Stations Lighthouse</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="pc gaming vr ready" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-dark rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-desktop equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">PC Gaming (VR Ready)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="accessoires vr câbles adaptateurs" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-headphones-alt equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Accessoires VR</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
 
             <div class="d-flex justify-content-center mt-4">
@@ -184,6 +103,12 @@
                         <div class="col-md-6">
                             <h4 id="equipmentName" class="mb-3">Nom du matériel VR</h4>
                             <p id="equipmentDescription" class="text-muted">Description du matériel VR...</p>
+                            <p class="mb-2">
+                                <strong>État :</strong> <span id="equipmentState"></span>
+                            </p>
+                            <p class="mb-2">
+                                <strong>Quantité disponible :</strong> <span id="equipmentQuantity"></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -203,31 +128,49 @@
         const itemContainers = document.querySelectorAll('.item-container');
         const itemCards = document.querySelectorAll('[data-item]');
 
-        function getEquipmentData(card) {
-            const name = card.querySelector('span').textContent.trim();
-            const iconClass = card.querySelector('i').className;
-
-            // Generate description based on name
-            const description = `${name} est un équipement de réalité virtuelle de pointe, idéal pour des expériences immersives et des projets de recherche. Disponible pour tous les étudiants et le personnel de l'université Gustave Eiffel.`;
-
-            // Image mapping for VR equipment
-            const imageMap = {
-                'fa-vr-cardboard': 'https://images.unsplash.com/photo-1617042375876-a1458998782f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Generic VR headset
-                'fa-hand-pointer': 'https://images.unsplash.com/photo-1616781429938-2df8d1c97a29?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // VR controllers
-                'fa-broadcast-tower': 'https://images.unsplash.com/photo-1616781429938-2df8d1c97a29?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Base stations (can reuse controller image if no specific image)
-                'fa-desktop': 'https://images.unsplash.com/photo-1593305841398-b0a6861e6879?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Gaming PC
-                'fa-headphones-alt': 'https://images.unsplash.com/photo-1546435345-23c21a403487?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' // Accessories
-            };
-
-            let image = 'https://images.unsplash.com/photo-1617042375876-a1458998782f?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Default VR image
-            for (const key in imageMap) {
-                if (iconClass.includes(key)) {
-                    image = imageMap[key];
-                    break;
-                }
+        // Fonction pour récupérer les détails du matériel
+        async function getMaterielDetails(id) {
+            try {
+                const response = await fetch(`api/materiel.php?id=${id}`);
+                if (!response.ok) throw new Error('Erreur réseau');
+                return await response.json();
+            } catch (error) {
+                console.error('Erreur:', error);
+                return null;
             }
-            return { name, description, image };
         }
+
+        itemCards.forEach(card => {
+            card.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                const materiel = await getMaterielDetails(id);
+                
+                if (materiel) {
+                    document.getElementById('equipmentName').textContent = materiel.Designation;
+                    document.getElementById('equipmentDescription').textContent = materiel.Descriptif || 
+                        `${materiel.Designation} est un équipement de réalité virtuelle disponible pour tous les étudiants et le personnel de l'université.`;
+                    document.getElementById('equipmentState').textContent = materiel.Etat_Global;
+                    document.getElementById('equipmentQuantity').textContent = materiel.Quantite_Totale;
+                    document.getElementById('equipmentImage').src = materiel.Photo_Path || 'images/default-vr.jpg';
+                    document.getElementById('equipmentImage').alt = materiel.Designation;
+
+                    const reserveButton = document.getElementById('reserveButton');
+                    reserveButton.onclick = function() {
+                        window.location.href = `calendrier.php?materiel_id=${materiel.ID_Materiel}`;
+                    };
+
+                    const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
+                    modal.show();
+                }
+            });
+
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
 
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase().trim();
@@ -250,34 +193,6 @@
             } else {
                 hideNoResults();
             }
-        });
-
-        itemCards.forEach(card => {
-            card.addEventListener('click', function() {
-                // Generate equipment data
-                const equipment = getEquipmentData(this);
-
-                document.getElementById('equipmentName').textContent = equipment.name;
-                document.getElementById('equipmentDescription').textContent = equipment.description;
-                document.getElementById('equipmentImage').src = equipment.image;
-                document.getElementById('equipmentImage').alt = equipment.name;
-
-                const reserveButton = document.getElementById('reserveButton');
-                // MODIFICATION ICI: Passage du nom du matériel en paramètre d'URL
-                reserveButton.onclick = function() {
-                    window.location.href = `calendrier.php?equipment_name=${encodeURIComponent(equipment.name)}`;
-                };
-
-                const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
-                modal.show();
-            });
-
-            card.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    this.click();
-                }
-            });
         });
 
         function showNoResults() {

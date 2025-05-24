@@ -1,94 +1,435 @@
-.message {
-	margin-top: 15px;
-	padding: 10px;
+body {
+	font-family: 'Poppins', sans-serif;
+	margin: 0;
+	padding: 20px;
+	background-color: #f5f5f5;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	background-color: white;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.logo-container img {
+	max-width: 200px;
+	height: auto;
+}
+
+h1 {
+	color: #333;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.background-band {
+	height: 5px;
+	background: linear-gradient(to right, #4a90e2, #50e3c2);
+	margin: 20px 0;
+}
+
+.equipment-display {
+	background-color: #f8f9fa;
+	padding: 15px;
 	border-radius: 5px;
+	margin-bottom: 20px;
+	font-weight: 600;
+}
+
+.form-section {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+label {
+	font-weight: 600;
+	color: #555;
+}
+
+input[type="date"],
+input[type="time"] {
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+button {
+	background-color: #4a90e2;
+	color: white;
+	border: none;
+	padding: 12px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	transition: background-color 0.3s;
+}
+
+button:hover {
+	background-color: #357abd;
+}
+
+.message {
+	padding: 15px;
+	border-radius: 5px;
+	margin-top: 15px;
 	text-align: center;
 }
+
 .message.success {
 	background-color: #d4edda;
 	color: #155724;
 	border: 1px solid #c3e6cb;
 }
+
 .message.error {
 	background-color: #f8d7da;
 	color: #721c24;
 	border: 1px solid #f5c6cb;
 }
-.equipment-display {
-	background-color: #f0f0f0;
+
+@media (max-width: 768px) {
+	.container {
 	padding: 15px;
-	border-radius: 8px;
-	margin-bottom: 20px;
-	text-align: center;
-	font-size: 1.1em;
-	font-weight: bold;
+	}
+
+	input[type="date"],
+	input[type="time"] {
+		width: 100%;
+	}
+
+	.calendar-day {
+		padding: 10px;
+	}
+
+	.time-grid {
+		height: 550px;
+	}
+
+	.hour-label {
+		font-size: 10px;
+	}
 }
 
 .calendar-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
 }
 
 .calendar {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 20px;
 }
 
 .calendar th {
-    background-color: #f8f9fa;
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #dee2e6;
+	background-color: #f8f9fa;
+	padding: 10px;
+	text-align: center;
+	border: 1px solid #dee2e6;
 }
 
 .calendar td {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #dee2e6;
-    cursor: pointer;
+	padding: 10px;
+	text-align: center;
+	border: 1px solid #dee2e6;
+	cursor: pointer;
 }
 
 .calendar td.available {
-    background-color: #d4edda;
+	background-color: #d4edda;
 }
 
 .calendar td.unavailable {
-    background-color: #f8d7da;
-    cursor: not-allowed;
+	background-color: #f8d7da;
+	cursor: not-allowed;
 }
 
 .calendar td.selected {
-    background-color: #007bff;
-    color: white;
+	background-color: #007bff;
+	color: white;
 }
 
 .time-slots {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: 10px;
+	margin-top: 20px;
 }
 
 .time-slot {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    cursor: pointer;
+	padding: 10px;
+	text-align: center;
+	border: 1px solid #dee2e6;
+	border-radius: 4px;
+	cursor: pointer;
 }
 
 .time-slot.available {
-    background-color: #d4edda;
+	background-color: #d4edda;
 }
 
 .time-slot.unavailable {
-    background-color: #f8d7da;
-    cursor: not-allowed;
+	background-color: #f8d7da;
+	cursor: not-allowed;
 }
 
 .time-slot.selected {
-    background-color: #007bff;
-    color: white;
+	background-color: #007bff;
+	color: white;
+}
+
+/* Styles du calendrier */
+#calendar-container {
+	margin-bottom: 30px;
+}
+
+.calendar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.calendar-header button {
+	background-color: #4a90e2;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.calendar-header h2 {
+	margin: 0;
+	color: #333;
+}
+
+.calendar-grid {
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.calendar-days {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	background-color: #f8f9fa;
+	border-bottom: 1px solid #ddd;
+}
+
+.calendar-days div {
+	padding: 10px;
+	text-align: center;
+	font-weight: 600;
+}
+
+.calendar-dates {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-day {
+	padding: 15px;
+	text-align: center;
+	border: 1px solid #ddd;
+	position: relative;
+	min-height: 40px;
+	cursor: pointer;
+}
+
+.calendar-day:hover {
+	background-color: #f8f9fa;
+}
+
+.calendar-day.empty {
+	background-color: #f8f9fa;
+}
+
+.calendar-day.disabled {
+	color: #ccc;
+	cursor: not-allowed;
+	background-color: #f8f9fa;
+}
+
+.calendar-day.selected {
+	background-color: #e3f2fd;
+	border: 2px solid #4a90e2;
+}
+
+.reservation-indicator {
+	width: 6px;
+	height: 6px;
+	background-color: #4a90e2;
+	border-radius: 50%;
+	position: absolute;
+	bottom: 5px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+/* Styles de la grille horaire */
+.time-grid {
+	display: flex;
+	margin-top: 30px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	height: 600px; /* Exactement 10 heures * 60px */
+	position: relative;
+	margin-bottom: 20px;
+	overflow: hidden;
+}
+
+.time-grid-hours {
+	width: 60px;
+	border-right: 1px solid #ddd;
+	background-color: #f8f9fa;
+	display: flex;
+	flex-direction: column;
+}
+
+.hour-label {
+	height: 60px;
+	padding: 0 10px;
+	text-align: right;
+	font-size: 12px;
+	color: #666;
+	display: flex;
+	align-items: flex-start; /* Aligner le texte en haut */
+	border-bottom: 1px solid #ddd;
+}
+
+.reservations-container {
+	flex-grow: 1;
+	position: relative;
+	background: repeating-linear-gradient(
+		to bottom,
+		#f8f9fa 0px,
+		#f8f9fa 1px,
+		transparent 1px,
+		transparent 60px
+	);
+	cursor: pointer;
+}
+
+.reservation-block {
+	position: absolute;
+	left: 10px;
+	right: 10px;
+	background-color: #4a90e2;
+	border-radius: 4px;
+	padding: 5px;
+	color: white;
+	font-size: 12px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.reservation-block:hover {
+	transform: scale(1.02);
+	z-index: 100;
+}
+
+.reservation-tooltip {
+	display: none;
+	position: absolute;
+	background-color: white;
+	border: 1px solid #ddd;
+	padding: 10px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	z-index: 1000;
+	white-space: nowrap;
+	color: #333;
+	left: 100%;
+	top: 0;
+	margin-left: 10px;
+}
+
+.reservation-block:hover .reservation-tooltip {
+	display: block;
+}
+
+/* Styles pour la sélection d'heure */
+.time-slot-selector {
+	position: absolute;
+	left: 0;
+	right: 0;
+	background-color: rgba(74, 144, 226, 0.3);
+	border: 2px dashed #4a90e2;
+	z-index: 50;
+	pointer-events: none;
+}
+
+.reservation-controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	padding: 15px;
+	background-color: #f8f9fa;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+}
+
+.selected-time-display {
+	font-size: 16px;
+	color: #333;
+	font-weight: 600;
+}
+
+.reservation-button {
+	background-color: #4CAF50;
+	color: white;
+	border: none;
+	padding: 12px 25px;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	transition: background-color 0.3s;
+}
+
+.reservation-button:hover {
+	background-color: #45a049;
+}
+
+.reservation-button:disabled {
+	background-color: #cccccc;
+	cursor: not-allowed;
+}
+
+/* Styles pour la grille de réservation */
+.time-cursor {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background-color: #4a90e2;
+	pointer-events: none;
+	z-index: 40;
+}
+
+.time-cursor::after {
+	content: attr(data-time);
+	position: absolute;
+	right: 100%;
+	transform: translateY(-50%);
+	background-color: #4a90e2;
+	color: white;
+	padding: 2px 5px;
+	border-radius: 3px;
+	font-size: 12px;
+	margin-right: 5px;
+	white-space: nowrap;
 }

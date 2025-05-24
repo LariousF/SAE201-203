@@ -1,3 +1,18 @@
+<?php
+require_once '../src/model/connexion_bdd.php';
+require_once '../src/model/Salle.php';
+
+$salleModel = new Salle($connexion);
+$salles = $salleModel->getAllSalles();
+
+// Organiser les salles par étage
+$sallesParEtage = [];
+foreach ($salles as $salle) {
+    $etage = substr($salle['Nom_Salle'], 0, 1);
+    $sallesParEtage[$etage][] = $salle;
+}
+ksort($sallesParEtage);
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -55,617 +70,26 @@
             </div>
 
             <div class="row g-4" id="inventoryGrid">
-            
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 106 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle A4</span>
-                            </div>
-                        </div>
+                <?php foreach ($sallesParEtage as $etage => $sallesEtage): ?>
+                    <div class="col-12">
+                        <h3 class="mb-3">Étage <?= $etage ?></h3>
                     </div>
-                </div>
-
+                    <?php foreach ($sallesEtage as $salle): ?>
                 <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 106 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle B4</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 104 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 104</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 105 premier étage" role="button" tabindex="0">
+                        <div class="card h-100 shadow-sm" data-item="<?= strtolower($salle['Nom_Salle']) ?>" 
+                             data-id="<?= $salle['ID_Salle'] ?>" role="button" tabindex="0">
                         <div class="card-body text-center">
                             <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
                                 <i class="fas fa-door-open equipment-icon text-white"></i>
                             </div>
                             <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 105</span>
+                                    <span class="text-dark fw-medium"><?= htmlspecialchars($salle['Nom_Salle']) ?></span>
+                            </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 106 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 106</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 107 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 107</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 108 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 108</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 109 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 109</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 110 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 110</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 111 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 111</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 112 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 112</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 113 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 113</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 114 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 114</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 115 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 115</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 116 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 116</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 117 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 117</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 118 premier étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 118</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 204 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 204</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 205 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 205</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 206 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 206</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 207 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 207</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 208 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 208</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 209 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 209</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 210 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 210</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 211 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 211</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 212 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 212</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 213 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 213</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 214 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 214</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 215 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 215</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 216 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 216</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 217 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 217</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 218 deuxième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 218</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 304 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 304</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 305 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 305</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 306 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 306</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 307 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 307</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 308 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 308</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 309 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 309</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 310 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 310</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 311 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 311</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 312 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 312</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 313 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-danger rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 313</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 314 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-secondary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 314</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 315 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-info rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 315</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 316 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-success rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 316</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 317 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-primary rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 317</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6 item-container">
-                    <div class="card h-100 shadow-sm" data-item="salle 318 troisième étage" role="button" tabindex="0">
-                        <div class="card-body text-center">
-                            <div class="item-image bg-warning rounded d-flex align-items-center justify-content-center mb-3">
-                                <i class="fas fa-door-open equipment-icon text-white"></i>
-                            </div>
-                            <div class="bg-light rounded p-2">
-                                <span class="text-dark fw-medium">Salle 318</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
             </div>
 
             <div class="d-flex justify-content-center mt-4">
@@ -687,11 +111,17 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <img id="equipmentImage" src="" alt="" class="img-fluid rounded mb-3" style="width: 100%; height: 250px; object-fit: cover;">
+                            <img id="roomImage" src="" alt="" class="img-fluid rounded mb-3" style="width: 100%; height: 250px; object-fit: cover;">
                         </div>
                         <div class="col-md-6">
-                            <h4 id="equipmentName" class="mb-3">Nom de la salle</h4>
-                            <p id="equipmentDescription" class="text-muted">Description de la salle...</p>
+                            <h4 id="roomName" class="mb-3">Nom de la salle</h4>
+                            <p id="roomDescription" class="text-muted">Description de la salle...</p>
+                            <p class="mb-2">
+                                <strong>Capacité :</strong> <span id="roomCapacity"></span> personnes
+                            </p>
+                            <p class="mb-2">
+                                <strong>Équipements :</strong> <span id="roomEquipment"></span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -712,27 +142,74 @@
         const itemContainers = document.querySelectorAll('.item-container');
         const itemCards = document.querySelectorAll('[data-item]');
 
-        //Fonction pour generer automatiquement la description/image des salles
-        function getEquipmentData(card) {
-            const name = card.querySelector('span').textContent.trim();
-            const floor = name.startsWith('Salle 1') ? 'premier' : name.startsWith('Salle 2') ? 'deuxième' : 'troisième';
+        // Fonction pour récupérer les détails de la salle
+        async function getSalleDetails(id) {
+            try {
+                const response = await fetch(`api/salle.php?id=${id}`);
+                if (!response.ok) throw new Error('Erreur réseau');
+                return await response.json();
+            } catch (error) {
+                console.error('Erreur:', error);
+                return null;
+            }
+        }
 
-            //Génèrer une description grace au nom et à l'étage
-            const description = `${name} est une salle de cours située au ${floor} étage, disponible pour réservation. Idéale pour les cours magistraux, travaux dirigés ou réunions, elle est équipée pour répondre aux besoins académiques.`;
+        itemCards.forEach(card => {
+            card.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                const salle = await getSalleDetails(id);
+                
+                if (salle) {
+                    document.getElementById('roomName').textContent = salle.Nom_Salle;
+                    document.getElementById('roomDescription').textContent = 
+                        `Salle située au ${getEtageText(salle.Nom_Salle)} étage.`;
+                    document.getElementById('roomCapacity').textContent = salle.Capacite;
+                    document.getElementById('roomEquipment').textContent = salle.Equipements_Specifiques || 'Standard';
+                    document.getElementById('roomImage').src = getImageByEtage(salle.Nom_Salle);
+                    document.getElementById('roomImage').alt = salle.Nom_Salle;
 
-            // Générer une image basée sur l'étage ou un générique
-            const imageMap = {
-                'premier': 'https://images.unsplash.com/photo-1540546522-f6735e236319?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'deuxième': 'https://images.unsplash.com/photo-1610484738595-341e974e5088?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'troisième': 'https://plus.unsplash.com/photos/room-with-chairs-and-tables-rT36S_0dCxU?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    const reserveButton = document.getElementById('reserveButton');
+                    reserveButton.onclick = function() {
+                        window.location.href = `calendrier.php?salle_id=${salle.ID_Salle}`;
+                    };
+
+                    const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
+                    modal.show();
+                }
+            });
+
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        function getEtageText(nomSalle) {
+            const etage = nomSalle.charAt(0);
+            switch (etage) {
+                case '1': return 'premier';
+                case '2': return 'deuxième';
+                case '3': return 'troisième';
+                default: return 'rez-de-chaussée';
+            }
+        }
+
+        function getImageByEtage(nomSalle) {
+            // Correspondance directe pour les salles spécifiques
+            const salleImages = {
+                '212': 'images/Salle212 photo360.jpg',
+                '138': 'images/Salle138 photo360.JPG'
             };
 
-            let image = 'https://images.unsplash.com/photo-1579762715118-a6f17d16b17a?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Image par défaut
-            if (imageMap[floor]) {
-                image = imageMap[floor];
+            // Vérifier d'abord si on a une image spécifique pour cette salle
+            if (salleImages[nomSalle.substring(1)]) {
+                return salleImages[nomSalle.substring(1)];
             }
 
-            return { name, description, image };
+            // Si pas d'image spécifique, utiliser l'image par défaut
+            return 'images/logo_univ_gustave_eiffel.png';
         }
 
         searchInput.addEventListener('input', function(e) {
@@ -756,33 +233,6 @@
             } else {
                 hideNoResults();
             }
-        });
-
-        itemCards.forEach(card => {
-            card.addEventListener('click', function() {
-                // Génère les données de la salle
-                const equipment = getEquipmentData(this);
-
-                document.getElementById('equipmentName').textContent = equipment.name;
-                document.getElementById('equipmentDescription').textContent = equipment.description;
-                document.getElementById('equipmentImage').src = equipment.image;
-                document.getElementById('equipmentImage').alt = equipment.name;
-
-                const reserveButton = document.getElementById('reserveButton');
-                reserveButton.onclick = function() {
-                    window.location.href = `calendrier.php?salle=${encodeURIComponent(equipment.name)}`;
-                };
-
-                const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
-                modal.show();
-            });
-
-            card.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    this.click();
-                }
-            });
         });
 
         function showNoResults() {

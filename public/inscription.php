@@ -64,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (isset($message)): ?>
             <div class="alert alert-<?php echo $message_type; ?> mb-3">
                 <?php echo htmlspecialchars($message); ?>
-            </div>
+    </div>
         <?php endif; ?>
-        
+
         <form method="POST" action="">
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="password" class="form-label">Mot de passe</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <div class="mb-3">
+             <div class="mb-3">
                 <label for="confirm_password" class="form-label">Confirmer le mot de passe</label>
                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
             </div>
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="Enseignant">Enseignant</option>
                 </select>
             </div>
-            
+
             <!-- Champs spécifiques pour les étudiants -->
             <div id="etudiant_fields" style="display: none;">
                 <div class="mb-3">
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" class="form-control" id="promotion" name="promotion">
                 </div>
             </div>
-            
+
             <!-- Champs spécifiques pour les enseignants -->
             <div id="enseignant_fields" style="display: none;">
                 <div class="mb-3">
@@ -124,14 +124,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" class="form-control" id="fonction" name="fonction">
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-6">
                     <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
-                </div>
+            </div>
                 <div class="col-6">
                     <a href="connexion.php" class="btn btn-outline-secondary w-100">Se connecter</a>
-                </div>
+            </div>
             </div>
         </form>
     </div>

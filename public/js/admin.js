@@ -7,19 +7,12 @@
                     },
                     body: `id=${id}&action=valider`
                 })
-                .then(handleFetchError)
+                .then(response => response.text())
                 .then(result => {
                     if(result === 'success') {
                         alert('Compte validé avec succès');
-                        // Recharger uniquement le tableau des comptes
-                        fetch('/Clone/SAE201-203/src/admin/valider_compte.php')
-                            .then(handleFetchError)
-                            .then(html => {
-                                const tbody = document.querySelector('#validation-comptes tbody');
-                                if (tbody) {
-                                    tbody.innerHTML = html;
-                                }
-                            });
+                        // Recharger la liste des comptes
+                        rechargerComptesEnAttente();
                     } else {
                         alert('Erreur : ' + result);
                     }
@@ -40,19 +33,12 @@
                     },
                     body: `id=${id}&action=refuser`
                 })
-                .then(handleFetchError)
+                .then(response => response.text())
                 .then(result => {
                     if(result === 'success') {
                         alert('Compte refusé avec succès');
-                        // Recharger uniquement le tableau des comptes
-                        fetch('/Clone/SAE201-203/src/admin/valider_compte.php')
-                            .then(handleFetchError)
-                            .then(html => {
-                                const tbody = document.querySelector('#validation-comptes tbody');
-                                if (tbody) {
-                                    tbody.innerHTML = html;
-                                }
-                            });
+                        // Recharger la liste des comptes
+                        rechargerComptesEnAttente();
                     } else {
                         alert('Erreur : ' + result);
                     }
@@ -62,6 +48,20 @@
                     alert('Une erreur est survenue');
                 });
             }
+        }
+
+        function rechargerComptesEnAttente() {
+            fetch('/Clone/SAE201-203/src/admin/valider_compte.php')
+                .then(response => response.text())
+                .then(html => {
+                    const tbody = document.querySelector('#validation-comptes tbody');
+                    if (tbody) {
+                        tbody.innerHTML = html;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors du rechargement:', error);
+                });
         }
 
         // Fonctions de gestion du matériel
@@ -247,18 +247,7 @@
                 });
 
             // Charger les réservations en attente
-            fetch('/Clone/SAE201-203/src/admin/valider_reservation.php')
-                .then(handleFetchError)
-                .then(html => {
-                    const tbody = document.querySelector('#validation-reservations tbody');
-                    if (tbody) {
-                        tbody.innerHTML = html;
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Erreur lors du chargement des réservations');
-                });
+            loadPendingReservations();
 
             // Charger les retours de matériel
             fetch('/Clone/SAE201-203/src/admin/gestion_retours.php')
@@ -274,3 +263,74 @@
                     alert('Erreur lors du chargement des retours');
                 });
         });
+
+        function loadPendingReservations() {
+            fetch('../src/model/get_pending_reservations.php')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.querySelector('#validation-reservations table tbody');
+                    tbody.innerHTML = '';
+
+                    data.forEach(reservation => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${reservation.Prenom} ${reservation.Nom}</td>
+                            <td>${reservation.Item_Name} (${reservation.Item_Type})</td>
+                            <td>${formatDateTime(reservation.Date_Debut)}</td>
+                            <td>${formatDateTime(reservation.Date_Fin)}</td>
+                            <td>
+                                <button class="btn btn-success btn-sm" onclick="handleReservation(${reservation.ID_Reservation}, 'Validée')">
+                                    <i class="bi bi-check-lg"></i> Valider
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="handleReservation(${reservation.ID_Reservation}, 'Refusée')">
+                                    <i class="bi bi-x-lg"></i> Refuser
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors du chargement des réservations');
+                });
+        }
+
+        function handleReservation(reservationId, status) {
+            if (!confirm(`Êtes-vous sûr de vouloir ${status === 'Validée' ? 'valider' : 'refuser'} cette réservation ?`)) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('reservation_id', reservationId);
+            formData.append('status', status);
+
+            fetch('../src/model/update_reservation_status.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert(result.message);
+                    loadPendingReservations(); // Recharger la liste
+                } else {
+                    alert(result.message || 'Une erreur est survenue');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de la mise à jour du statut');
+            });
+        }
+
+        function formatDateTime(dateTime) {
+            const date = new Date(dateTime);
+            return date.toLocaleString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }

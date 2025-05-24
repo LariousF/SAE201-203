@@ -1,0 +1,19 @@
+{
+    "name": "iut/sae201-203",
+    "description": "Système de réservation pour l'IUT",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "IUT Team",
+            "email": "contact@iut.fr"
+        }
+    ]
+} 

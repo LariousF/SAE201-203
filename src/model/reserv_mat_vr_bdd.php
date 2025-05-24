@@ -1,103 +1,111 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Désactiver l'affichage des erreurs
 
-require_once 'db_connect.php';
+require_once 'connexion_bdd.php';
+require_once 'authentification.php';
 
-$response_message = '';
+header('Content-Type: application/json');
 
-$materiel_name = $_POST['equipment_name'] ?? '';
-$date_debut = $_POST['date'] . ' ' . $_POST['heure'] . ':00';
-$date_fin = $_POST['date'] . ' ' . ($_POST['heure'] + 1) . ':00'; // Par défaut 1h de réservation
-$quantite = 1; // Par défaut une unité
-
-if (!$auth->isLoggedIn()) {
-    die('Vous devez être connecté pour faire une réservation.');
-}
-$id_demandeur = $_SESSION['user_id'];
-
-if (empty($materiel_name) || empty($_POST['date']) || empty($_POST['heure'])) {
-    $response_message = 'Erreur: Tous les champs sont requis.';
-    echo $response_message;
+function sendJsonResponse($success, $message) {
+    echo json_encode([
+        'success' => $success,
+        'message' => $message
+    ]);
     exit;
 }
 
-if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $_POST['date']) || !preg_match("/^\d{2}:\d{2}$/", $_POST['heure'])) {
-    $response_message = 'Erreur: Format de date ou d\'heure invalide.';
-    echo $response_message;
-    exit;
+// Vérifier si l'utilisateur est connecté
+$authCheck = checkPermission();
+if (!$authCheck['success']) {
+    sendJsonResponse(false, 'Vous devez être connecté pour effectuer une réservation');
+}
+
+// Récupérer l'utilisateur courant
+$currentUser = $auth->getCurrentUser();
+if (!$currentUser) {
+    sendJsonResponse(false, 'Impossible de récupérer les informations de l\'utilisateur');
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    sendJsonResponse(false, 'Méthode non autorisée');
+}
+
+$equipment_name = $_POST['equipment_name'] ?? '';
+$date = $_POST['date'] ?? '';
+$heure_debut = $_POST['heure_debut'] ?? '';
+$heure_fin = $_POST['heure_fin'] ?? '';
+
+if (empty($equipment_name) || empty($date) || empty($heure_debut) || empty($heure_fin)) {
+    sendJsonResponse(false, 'Tous les champs sont obligatoires');
 }
 
 try {
-    // 1. Récupérer les informations du matériel
-    $stmt = $pdo->prepare("
-        SELECT ID_Materiel, Quantite_Totale, Etat_Global 
-        FROM Materiel 
-        WHERE Designation = ? 
-        AND Type_Materiel = 'VR'
-        AND Etat_Global != 'En panne'
-    ");
-    $stmt->execute([$materiel_name]);
-    $materiel = $stmt->fetch();
-    
+    // Récupérer l'ID du matériel
+    $stmt = $connexion->prepare("SELECT ID_Materiel FROM materiel WHERE Designation = ?");
+    $stmt->execute([$equipment_name]);
+    $materiel = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if (!$materiel) {
-        throw new Exception('Matériel VR non trouvé ou indisponible.');
+        sendJsonResponse(false, 'Matériel non trouvé');
     }
 
-    // 2. Vérifier la disponibilité (nombre d'unités déjà réservées pour cette période)
-    $stmt = $pdo->prepare("
-        SELECT SUM(Quantite_Reservee) as total_reserve
-        FROM Reservation
-        WHERE ID_Materiel = ?
-        AND Statut IN ('En attente', 'Validée')
+    // Créer les dates complètes pour la BDD
+    $date_debut = $date . ' ' . $heure_debut . ':00';
+    $date_fin = $date . ' ' . $heure_fin . ':00';
+
+    // Vérifier si le créneau est disponible
+    $stmt = $connexion->prepare("
+        SELECT COUNT(*) as nb_reservations 
+        FROM reservation 
+        WHERE ID_Materiel = ? 
         AND (
-            (Date_Debut <= ? AND Date_Fin >= ?) OR
-            (Date_Debut <= ? AND Date_Fin >= ?) OR
-            (Date_Debut >= ? AND Date_Fin <= ?)
+            (Date_Debut <= ? AND Date_Fin >= ?) 
+            OR (Date_Debut <= ? AND Date_Fin >= ?)
+            OR (Date_Debut >= ? AND Date_Fin <= ?)
         )
+        AND Statut NOT IN ('Refusée', 'Annulée')
     ");
+    
     $stmt->execute([
         $materiel['ID_Materiel'],
         $date_debut, $date_debut,
         $date_fin, $date_fin,
         $date_debut, $date_fin
     ]);
-    $reservation_existante = $stmt->fetch();
     
-    $quantite_disponible = $materiel['Quantite_Totale'] - ($reservation_existante['total_reserve'] ?? 0);
-    
-    if ($quantite_disponible < $quantite) {
-        throw new Exception('Désolé, ce matériel n\'est pas disponible pour la période sélectionnée.');
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result['nb_reservations'] > 0) {
+        sendJsonResponse(false, 'Ce créneau est déjà réservé');
     }
 
-    // 3. Insérer la réservation
-    $stmt = $pdo->prepare("
-        INSERT INTO Reservation (
-            ID_Demandeur, 
-            ID_Materiel, 
-            Quantite_Reservee,
+    // Insérer la réservation
+    $stmt = $connexion->prepare("
+        INSERT INTO reservation (
+            ID_Demandeur,
+            ID_Materiel,
             Date_Debut,
             Date_Fin,
             Motif,
             Statut,
             Date_Demande
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+        ) VALUES (?, ?, ?, ?, ?, ?, NOW())
     ");
 
     $stmt->execute([
-        $id_demandeur,
+        $currentUser['ID_Utilisateur'],
         $materiel['ID_Materiel'],
-        $quantite,
         $date_debut,
         $date_fin,
         'Réservation de matériel VR',
         'En attente'
     ]);
 
-    $response_message = 'Votre réservation a été enregistrée avec succès ! Elle est en attente de validation.';
+    sendJsonResponse(true, 'Votre demande de réservation a été enregistrée et est en attente de validation par un administrateur.');
 
-} catch (Exception $e) {
-    $response_message = 'Erreur lors de l\'enregistrement de la réservation : ' . $e->getMessage();
-    error_log('Erreur réservation : ' . $e->getMessage());
+} catch (PDOException $e) {
+    error_log("Erreur SQL : " . $e->getMessage());
+    sendJsonResponse(false, 'Une erreur est survenue lors de l\'enregistrement de la réservation');
 }
-
-echo $response_message;
 ?>

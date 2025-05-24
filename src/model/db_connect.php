@@ -15,7 +15,7 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $db_user, $db_pass, $options);
+    $connexion = new PDO($dsn, $db_user, $db_pass, $options);
 } catch (\PDOException $e) {
     die('Erreur de connexion à la base de données : ' . $e->getMessage());
 }
