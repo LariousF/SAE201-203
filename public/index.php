@@ -76,7 +76,7 @@ require_once '../src/model/authentification.php';
                             </a>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <a href="#" class="card category-card h-100 border">
+                            <a href="reserv_mat.php" class="card category-card h-100 border">
                                 <div class="card-body text-center p-4">
                                     <i class="bi bi-box-seam-fill card-icon mb-3"></i>
                                     <h3 class="card-title h5">Matériel (Général)</h3>

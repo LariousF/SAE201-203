@@ -262,12 +262,78 @@
         </div>
     </div>
 
+    <!-- Code pour description des matériels -->
+    <div class="modal fade" id="equipmentModal" tabindex="-1" aria-labelledby="equipmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="equipmentModalLabel">Détails de l'équipement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img id="equipmentImage" src="" alt="" class="img-fluid rounded mb-3" style="width: 100%; height: 250px; object-fit: cover;">
+                        </div>
+                        <div class="col-md-6">
+                            <h4 id="equipmentName" class="mb-3">Nom de l'équipement</h4>
+                            <p id="equipmentDescription" class="text-muted">Description de l'équipement...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-primary" id="reserveButton">
+                        <i class="bi bi-calendar-check"></i> Réserver cet équipement
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     
     <script>
         const searchInput = document.getElementById('searchInput');
         const itemContainers = document.querySelectorAll('.item-container');
         const itemCards = document.querySelectorAll('[data-item]');
+
+        // Fonction pour générer automatiquement les données d'équipement
+        function getEquipmentData(card) {
+            const name = card.querySelector('span').textContent.trim();
+            const icon = card.querySelector('i').className;
+            
+            // Générer une description générique basée sur le nom
+            const description = `${name} disponible pour réservation. Matériel de qualité professionnelle adapté aux besoins éducatifs et de recherche de l'université.`;
+            
+            // Générer une image par défaut basée sur l'icône
+            const imageMap = {
+                'fa-mobile-alt': 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop',
+                'fa-video': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
+                'fa-gamepad': 'https://images.unsplash.com/photo-1556438064-2d7646166914?w=400&h=300&fit=crop',
+                'fa-camera': 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=300&fit=crop',
+                'fa-hdd': 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=300&fit=crop',
+                'fa-camera-retro': 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&h=300&fit=crop',
+                'fa-vr-cardboard': 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&h=300&fit=crop',
+                'fa-helicopter': 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=400&h=300&fit=crop',
+                'fa-chalkboard': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
+                'fa-headphones': 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=300&fit=crop',
+                'fa-laptop': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop',
+                'fa-desktop': 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&h=300&fit=crop',
+                'fa-tools': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop'
+            };
+            
+            // Trouver l'icône correspondante
+            let image = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop'; // Image par défaut
+            for (const iconClass in imageMap) {
+                if (icon.includes(iconClass)) {
+                    image = imageMap[iconClass];
+                    break;
+                }
+            }
+            
+            return { name, description, image };
+        }
 
         // Recherche
         searchInput.addEventListener('input', function(e) {
@@ -294,13 +360,28 @@
             }
         });
 
-        // Clics sur cartes
+        // Gestion générique des clics sur les cartes
         itemCards.forEach(card => {
             card.addEventListener('click', function() {
-                const itemName = this.querySelector('span').textContent;
-                if (confirm(`Voulez-vous réserver : ${itemName} ?`)) {
-                    alert(`Réservation confirmée pour : ${itemName}`);
-                }
+                // Générer automatiquement les données de l'équipement
+                const equipment = getEquipmentData(this);
+                
+                // Remplir la modal avec les données générées
+                document.getElementById('equipmentName').textContent = equipment.name;
+                document.getElementById('equipmentDescription').textContent = equipment.description;
+                document.getElementById('equipmentImage').src = equipment.image;
+                document.getElementById('equipmentImage').alt = equipment.name;
+                
+                // Gérer le bouton de réservation
+                const reserveButton = document.getElementById('reserveButton');
+                reserveButton.onclick = function() {
+                    // Rediriger vers la page de réservation avec le nom de l'équipement
+                    window.location.href = `reservation.php?equipment=${encodeURIComponent(equipment.name)}`;
+                };
+                
+                // Afficher la modal
+                const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
+                modal.show();
             });
 
             card.addEventListener('keydown', function(e) {
@@ -332,7 +413,40 @@
         document.querySelector('.btn-outline-primary').addEventListener('click', function() {
             alert('Fonctionnalité de pagination à implémenter');
         });
+
+    const materiels = [
+      {
+        nom: "Ordinateur portable",
+        description: "Ordinateur puissant pour le développement et les présentations.",
+        image: "https://via.placeholder.com/150?text=Ordinateur"
+      },
+      {
+        nom: "Projecteur",
+        description: "Utilisé pour projeter des présentations lors des réunions.",
+        image: "https://via.placeholder.com/150?text=Projecteur"
+      },
+      {
+        nom: "Caméra",
+        description: "Caméra haute définition pour la vidéoconférence.",
+        image: "https://via.placeholder.com/150?text=Caméra"
+      }
+    ];
+
+    const container = document.getElementById("materiels-container");
+
+    materiels.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <img src="${item.image}" alt="${item.nom}">
+        <div class="item-content">
+          <h2 class="item-title">${item.nom}</h2>
+          <p class="item-description">${item.description}</p>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
     </script>
-</body>
 </body>
 </html>
