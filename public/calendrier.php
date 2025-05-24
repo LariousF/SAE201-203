@@ -83,7 +83,7 @@
 
             // Envoi des données au serveur via Fetch API
             try {
-                const response = await fetch('process_reservation_vr.php', {
+                const response = await fetch('/src/model/reserv_mat_vr_bdd.php', {
                     method: 'POST',
                     headers: {
                         // --- CHANGEMENT ICI : Le Content-Type pour les données de formulaire URL-encodées ---
