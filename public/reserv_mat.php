@@ -298,15 +298,15 @@
         const itemContainers = document.querySelectorAll('.item-container');
         const itemCards = document.querySelectorAll('[data-item]');
 
-        // Fonction pour générer automatiquement les données d'équipement
+        //Fonction pour generer automatiquement la description/image des matériels
         function getEquipmentData(card) {
             const name = card.querySelector('span').textContent.trim();
             const icon = card.querySelector('i').className;
             
-            // Générer une description générique basée sur le nom
+            //Génèrer une description grace au nom
             const description = `${name} disponible pour réservation. Matériel de qualité professionnelle adapté aux besoins éducatifs et de recherche de l'université.`;
             
-            // Générer une image par défaut basée sur l'icône
+            //Génèrer une image grace a l'icone
             const imageMap = {
                 'fa-mobile-alt': 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop',
                 'fa-video': 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
@@ -323,7 +323,6 @@
                 'fa-tools': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop'
             };
             
-            // Trouver l'icône correspondante
             let image = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop'; // Image par défaut
             for (const iconClass in imageMap) {
                 if (icon.includes(iconClass)) {
@@ -335,7 +334,6 @@
             return { name, description, image };
         }
 
-        // Recherche
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase().trim();
             
@@ -351,7 +349,6 @@
                 }
             });
 
-            // Message aucun résultat
             const visibleItems = document.querySelectorAll('.item-container:not(.d-none)');
             if (visibleItems.length === 0 && searchTerm !== '') {
                 showNoResults();
@@ -360,26 +357,21 @@
             }
         });
 
-        // Gestion générique des clics sur les cartes
         itemCards.forEach(card => {
             card.addEventListener('click', function() {
-                // Générer automatiquement les données de l'équipement
+                // Génère les données du matériel
                 const equipment = getEquipmentData(this);
                 
-                // Remplir la modal avec les données générées
                 document.getElementById('equipmentName').textContent = equipment.name;
                 document.getElementById('equipmentDescription').textContent = equipment.description;
                 document.getElementById('equipmentImage').src = equipment.image;
                 document.getElementById('equipmentImage').alt = equipment.name;
                 
-                // Gérer le bouton de réservation
                 const reserveButton = document.getElementById('reserveButton');
                 reserveButton.onclick = function() {
-                    // Rediriger vers la page de réservation avec le nom de l'équipement
-                    window.location.href = `reservation.php?equipment=${encodeURIComponent(equipment.name)}`;
+                    window.location.href = "calendrier.php"  //?equipment=${encodeURIComponent(equipment.name)}`;
                 };
                 
-                // Afficher la modal
                 const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
                 modal.show();
             });
