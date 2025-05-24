@@ -1,9 +1,8 @@
 <?php
-require_once '../model/Database.php';
+require_once '../model/connexion_bdd.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : '';
-    $db = Database::getInstance();
     
     switch($action) {
         case 'ajouter':
@@ -22,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $params = [$nom, $categorie, $description, $etat, $id];
             }
             
-            $stmt = $db->prepare($sql);
+            $stmt = $connexion->prepare($sql);
             if ($stmt->execute($params)) {
                 echo "success";
             } else {
@@ -34,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
             if ($id > 0) {
                 $sql = "DELETE FROM Materiel WHERE id = ?";
-                $stmt = $db->prepare($sql);
+                $stmt = $connexion->prepare($sql);
                 if ($stmt->execute([$id])) {
                     echo "success";
                 } else {
@@ -47,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
             if ($id > 0) {
                 $sql = "SELECT * FROM Materiel WHERE id = ?";
-                $stmt = $db->prepare($sql);
+                $stmt = $connexion->prepare($sql);
                 $stmt->execute([$id]);
                 $materiel = $stmt->fetch(PDO::FETCH_ASSOC);
                 echo $materiel ? serialize($materiel) : "error";
@@ -58,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Récupérer la liste du matériel
 function getMateriel() {
-    $db = Database::getInstance();
+    global $connexion;
     $sql = "SELECT * FROM Materiel ORDER BY categorie, nom";
-    $stmt = $db->query($sql);
+    $stmt = $connexion->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 } 

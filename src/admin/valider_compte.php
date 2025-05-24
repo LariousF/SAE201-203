@@ -1,20 +1,18 @@
 <?php
-require_once '../model/Database.php';
+require_once '../model/connexion_bdd.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
     $action = isset($_POST['action']) ? $_POST['action'] : '';
     
     if ($id > 0 && ($action === 'valider' || $action === 'refuser')) {
-        $db = Database::getInstance();
-        
         if ($action === 'valider') {
             $sql = "UPDATE Utilisateur SET est_valide = 1 WHERE id = ?";
         } else {
             $sql = "DELETE FROM Utilisateur WHERE id = ?";
         }
         
-        $stmt = $db->prepare($sql);
+        $stmt = $connexion->prepare($sql);
         if ($stmt->execute([$id])) {
             echo "success";
         } else {
@@ -25,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Récupérer la liste des comptes en attente
 function getComptesEnAttente() {
-    $db = Database::getInstance();
+    global $connexion;
     $sql = "SELECT u.id, u.nom, u.email, u.date_inscription, 
             CASE 
                 WHEN e.id IS NOT NULL THEN 'Étudiant'
@@ -39,6 +37,6 @@ function getComptesEnAttente() {
             WHERE u.est_valide = 0
             ORDER BY u.date_inscription DESC";
             
-    $stmt = $db->query($sql);
+    $stmt = $connexion->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 } 

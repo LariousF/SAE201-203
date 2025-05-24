@@ -1,9 +1,9 @@
 <?php
-require_once '../model/Database.php';
+require_once '../model/connexion_bdd.php';
 
 // Récupérer la liste des retours de matériel
 function getRetoursMateriel() {
-    $db = Database::getInstance();
+    global $connexion;
     $sql = "SELECT r.id, m.nom as materiel, u.nom as utilisateur,
             r.date_retour, r.etat_retour, r.commentaire
             FROM Retour r
@@ -11,7 +11,7 @@ function getRetoursMateriel() {
             JOIN Utilisateur u ON r.utilisateur_id = u.id
             ORDER BY r.date_retour DESC";
             
-    $stmt = $db->query($sql);
+    $stmt = $connexion->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -23,17 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $commentaire = isset($_POST['commentaire']) ? $_POST['commentaire'] : '';
     
     if ($materiel_id > 0 && $utilisateur_id > 0) {
-        $db = Database::getInstance();
-        
         $sql = "INSERT INTO Retour (materiel_id, utilisateur_id, date_retour, etat_retour, commentaire) 
                 VALUES (?, ?, NOW(), ?, ?)";
         
-        $stmt = $db->prepare($sql);
+        $stmt = $connexion->prepare($sql);
         if ($stmt->execute([$materiel_id, $utilisateur_id, $etat_retour, $commentaire])) {
             // Mettre à jour l'état du matériel si nécessaire
             if ($etat_retour === 'defectueux') {
                 $sql = "UPDATE Materiel SET etat = 'maintenance' WHERE id = ?";
-                $stmt = $db->prepare($sql);
+                $stmt = $connexion->prepare($sql);
                 $stmt->execute([$materiel_id]);
             }
             echo "success";
