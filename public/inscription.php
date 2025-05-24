@@ -1,5 +1,61 @@
-<?php require_once '../src/model/db_connect.php'; 
-session_start();
+<?php 
+require_once '../src/model/db_connect.php';
+require_once '../src/model/authentification.php';
+
+// Si l'utilisateur est déjà connecté, le rediriger vers l'accueil
+if ($auth->isLoggedIn()) {
+    header('Location: index.php');
+    exit;
+}
+
+$message = '';
+$message_type = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validation des champs
+    if ($_POST['mot_de_passe'] !== $_POST['confirm_mot_de_passe']) {
+        $message = "Les mots de passe ne correspondent pas.";
+        $message_type = 'danger';
+    } else {
+        $userData = [
+            'email' => $_POST['email'],
+            'pseudo' => $_POST['pseudo'],
+            'nom' => $_POST['nom'],
+            'prenom' => $_POST['prenom'],
+            'password' => $_POST['mot_de_passe'],
+            'role' => $_POST['role'],
+            'date_naissance' => $_POST['date_naissance'],
+            'adresse_postale' => $_POST['adresse_postale']
+        ];
+
+        // Ajouter les champs spécifiques selon le rôle
+        switch ($_POST['role']) {
+            case 'Etudiant':
+                $userData['numero_etudiant'] = $_POST['numero_etudiant'];
+                $userData['promotion'] = $_POST['promotion'];
+                $userData['td'] = $_POST['td'];
+                $userData['tp'] = $_POST['tp'];
+                break;
+            case 'Enseignant':
+                $userData['qualification'] = $_POST['qualification'];
+                $userData['fonction'] = $_POST['fonction'];
+                break;
+        }
+
+        $result = $auth->register($userData);
+        
+        if ($result['success']) {
+            // Rediriger vers la page de connexion avec un message de succès
+            $_SESSION['form_message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
+            $_SESSION['form_message_type'] = 'success';
+            header('Location: connexion.php');
+            exit;
+        } else {
+            $message = $result['message'];
+            $message_type = 'danger';
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -9,27 +65,25 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-        
+    <link rel="stylesheet" href="css/inscription.css">
 </head>
 <body class="bg-light">
 
 <div class="container">
     <div class="logo-container mt-4">
-        <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="logo-img">
+         <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="logo-img">
     </div>
 
     <div class="inscription-form-container">
         <h2 class="mb-4 text-center">Créer un compte</h2>
 
-        <?php
-        if (isset($_SESSION['form_message'])) {
-            echo '<div class="alert alert-' . ($_SESSION['form_message_type'] ?? 'danger') . '">' . htmlspecialchars($_SESSION['form_message']) . '</div>';
-            unset($_SESSION['form_message']);
-            unset($_SESSION['form_message_type']);
-        }
-        ?>
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-<?php echo $message_type; ?>">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
 
-        <form method="POST" action="../src/model/inscription_bdd.php">
+        <form method="POST" action="" id="inscriptionForm">
             <div class="mb-3">
                 <label for="email" class="form-label">Adresse email</label>
                 <input type="email" name="email" id="email" class="form-control" placeholder="nom@exemple.com" required>
@@ -122,5 +176,7 @@ session_start();
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/inscription_role.js"></script>
+
 </body>
 </html>

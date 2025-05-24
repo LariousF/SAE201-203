@@ -31,6 +31,7 @@ CREATE TABLE Enseignant (
   ID_Utilisateur INT UNSIGNED,
   Qualification VARCHAR(100) NULL COMMENT 'Domaine de compétence ou diplôme',
   Fonction VARCHAR(100) NULL COMMENT 'Ex: Professeur, Maître de conférences',
+  Telephone_pro_enseignant VARCHAR(20) NULL COMMENT 'Numéro de téléphone professionnel de l enseignant'
   PRIMARY KEY(ID_Utilisateur),
   FOREIGN KEY(ID_Utilisateur) REFERENCES Utilisateur(ID_Utilisateur)
     ON DELETE CASCADE

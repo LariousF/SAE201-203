@@ -1,67 +1,103 @@
 <?php
-// Pas de header('Content-Type: application/json'); car nous ne renvoyons plus de JSON par défaut.
-// Si vous voulez une réponse simple, vous pouvez juste echo du texte.
 
-// Inclure votre fichier de connexion à la base de données
-// Assurez-vous que ce chemin est correct
-require_once 'db_connect.php'; // Remplacez par le nom réel de votre fichier de connexion
+require_once 'db_connect.php';
 
-// Initialiser une variable pour le message de réponse
 $response_message = '';
 
-// Récupérer les données envoyées par la requête POST
-$equipment_name = $_POST['equipment_name'] ?? '';
-$reservation_date = $_POST['date'] ?? '';
-$reservation_time = $_POST['heure'] ?? '';
+$materiel_name = $_POST['equipment_name'] ?? '';
+$date_debut = $_POST['date'] . ' ' . $_POST['heure'] . ':00';
+$date_fin = $_POST['date'] . ' ' . ($_POST['heure'] + 1) . ':00'; // Par défaut 1h de réservation
+$quantite = 1; // Par défaut une unité
 
-// --- Simulation de l'utilisateur (À REMPLACER PAR VOTRE SYSTÈME D'AUTHENTIFICATION) ---
-// Dans un vrai système, l'ID de l'utilisateur viendrait de votre session utilisateur après authentification.
-// Par exemple : $_SESSION['user_id']
-$user_id = 1; // Remplacez ceci par l'ID de l'utilisateur connecté
-// --- FIN SIMULATION ---
+if (!$auth->isLoggedIn()) {
+    die('Vous devez être connecté pour faire une réservation.');
+}
+$id_demandeur = $_SESSION['user_id'];
 
-if (empty($equipment_name) || empty($reservation_date) || empty($reservation_time)) {
+if (empty($materiel_name) || empty($_POST['date']) || empty($_POST['heure'])) {
     $response_message = 'Erreur: Tous les champs sont requis.';
-    echo $response_message; // Renvoie le message directement
+    echo $response_message;
     exit;
 }
 
-// Validation basique du format de date et heure
-if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $reservation_date) || !preg_match("/^\d{2}:\d{2}$/", $reservation_time)) {
+if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $_POST['date']) || !preg_match("/^\d{2}:\d{2}$/", $_POST['heure'])) {
     $response_message = 'Erreur: Format de date ou d\'heure invalide.';
-    echo $response_message; // Renvoie le message directement
+    echo $response_message;
     exit;
 }
 
-// Vérifier la disponibilité (logique déjà présente dans calendrier.php, mais bonne pratique de la re-vérifier côté serveur)
-// Pour l'exemple, on reprend la logique simple basée sur le jour du mois.
-// Dans un cas réel, vous vérifieriez les conflits dans la base de données.
-$day = (int)date('d', strtotime($reservation_date));
-$is_available_day = (($day - 1) % 5) < 3; // Lundi, Mardi, Mercredi (jours 1-3) disponibles
-
-$hour = (int)substr($reservation_time, 0, 2);
-$is_available_hour = ($hour >= 8 && $hour <= 18);
-
-if (!$is_available_day || !$is_available_hour) {
-    $response_message = 'Réservation impossible pour cette date ou cette heure.';
-    echo $response_message; // Renvoie le message directement
-    exit;
-}
-
-// Insertion dans la base de données
 try {
-    // Connexion à la base de données (assurez-vous que $pdo est défini dans db_connect.php)
-    $stmt = $pdo->prepare("INSERT INTO reservations (user_id, equipment_name, reservation_date, reservation_time) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$user_id, $equipment_name, $reservation_date, $reservation_time]);
+    // 1. Récupérer les informations du matériel
+    $stmt = $pdo->prepare("
+        SELECT ID_Materiel, Quantite_Totale, Etat_Global 
+        FROM Materiel 
+        WHERE Designation = ? 
+        AND Type_Materiel = 'VR'
+        AND Etat_Global != 'En panne'
+    ");
+    $stmt->execute([$materiel_name]);
+    $materiel = $stmt->fetch();
+    
+    if (!$materiel) {
+        throw new Exception('Matériel VR non trouvé ou indisponible.');
+    }
 
-    $response_message = 'Votre réservation a été enregistrée avec succès !';
+    // 2. Vérifier la disponibilité (nombre d'unités déjà réservées pour cette période)
+    $stmt = $pdo->prepare("
+        SELECT SUM(Quantite_Reservee) as total_reserve
+        FROM Reservation
+        WHERE ID_Materiel = ?
+        AND Statut IN ('En attente', 'Validée')
+        AND (
+            (Date_Debut <= ? AND Date_Fin >= ?) OR
+            (Date_Debut <= ? AND Date_Fin >= ?) OR
+            (Date_Debut >= ? AND Date_Fin <= ?)
+        )
+    ");
+    $stmt->execute([
+        $materiel['ID_Materiel'],
+        $date_debut, $date_debut,
+        $date_fin, $date_fin,
+        $date_debut, $date_fin
+    ]);
+    $reservation_existante = $stmt->fetch();
+    
+    $quantite_disponible = $materiel['Quantite_Totale'] - ($reservation_existante['total_reserve'] ?? 0);
+    
+    if ($quantite_disponible < $quantite) {
+        throw new Exception('Désolé, ce matériel n\'est pas disponible pour la période sélectionnée.');
+    }
 
-} catch (PDOException $e) {
-    // Gérer les erreurs de base de données
+    // 3. Insérer la réservation
+    $stmt = $pdo->prepare("
+        INSERT INTO Reservation (
+            ID_Demandeur, 
+            ID_Materiel, 
+            Quantite_Reservee,
+            Date_Debut,
+            Date_Fin,
+            Motif,
+            Statut,
+            Date_Demande
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+    ");
+
+    $stmt->execute([
+        $id_demandeur,
+        $materiel['ID_Materiel'],
+        $quantite,
+        $date_debut,
+        $date_fin,
+        'Réservation de matériel VR',
+        'En attente'
+    ]);
+
+    $response_message = 'Votre réservation a été enregistrée avec succès ! Elle est en attente de validation.';
+
+} catch (Exception $e) {
     $response_message = 'Erreur lors de l\'enregistrement de la réservation : ' . $e->getMessage();
-    // En développement, vous pouvez afficher l'erreur complète, en production, loguez-la.
-    // error_log('Erreur PDO: ' . $e->getMessage());
+    error_log('Erreur réservation : ' . $e->getMessage());
 }
 
-echo $response_message; // Renvoie le message final (succès ou erreur)
+echo $response_message;
 ?>

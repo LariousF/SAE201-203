@@ -110,3 +110,18 @@ footer {
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
+
+.nav-pills .nav-link.active {
+	background-color: #0d6efd;
+	color: white;
+}
+.nav-pills .nav-link {
+	color: #0d6efd;
+}
+.table-responsive {
+	max-height: 400px;
+	overflow-y: auto;
+}
+.status-badge {
+	width: 100px;
+}

@@ -23,3 +23,72 @@
 	font-size: 1.1em;
 	font-weight: bold;
 }
+
+.calendar-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.calendar th {
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.calendar td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    cursor: pointer;
+}
+
+.calendar td.available {
+    background-color: #d4edda;
+}
+
+.calendar td.unavailable {
+    background-color: #f8d7da;
+    cursor: not-allowed;
+}
+
+.calendar td.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.time-slot {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.time-slot.available {
+    background-color: #d4edda;
+}
+
+.time-slot.unavailable {
+    background-color: #f8d7da;
+    cursor: not-allowed;
+}
+
+.time-slot.selected {
+    background-color: #007bff;
+    color: white;
+}

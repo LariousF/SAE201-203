@@ -13,7 +13,7 @@
     <header class="bg-white border-bottom">
         <nav class="container navbar navbar-expand-lg navbar-light py-4">
             <div class="container-fluid px-0">
-                <a class="navbar-logo me-4" href="accueil.php">
+                <a class="navbar-logo me-4" href="index.php">
                     <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="img-fluid" style="max-width: 200px; height: auto;">
                 </a>
 
