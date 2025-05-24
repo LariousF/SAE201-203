@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="col-lg-4 col-md-6 item-container">
                     <div class="card h-100 shadow-sm" data-item="salle 104 premier étage" role="button" tabindex="0">
                         <div class="card-body text-center">

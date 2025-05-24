@@ -203,7 +203,6 @@
         const itemContainers = document.querySelectorAll('.item-container');
         const itemCards = document.querySelectorAll('[data-item]');
 
-        // Function to generate equipment data (description/image)
         function getEquipmentData(card) {
             const name = card.querySelector('span').textContent.trim();
             const iconClass = card.querySelector('i').className;
@@ -264,8 +263,9 @@
                 document.getElementById('equipmentImage').alt = equipment.name;
 
                 const reserveButton = document.getElementById('reserveButton');
+                // MODIFICATION ICI: Passage du nom du matériel en paramètre d'URL
                 reserveButton.onclick = function() {
-                    window.location.href = `calendrier.php?equipment=${encodeURIComponent(equipment.name)}`;
+                    window.location.href = `calendrier.php?equipment_name=${encodeURIComponent(equipment.name)}`;
                 };
 
                 const modal = new bootstrap.Modal(document.getElementById('equipmentModal'));
