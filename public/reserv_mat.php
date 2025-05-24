@@ -414,39 +414,7 @@
             alert('Fonctionnalité de pagination à implémenter');
         });
 
-    const materiels = [
-      {
-        nom: "Ordinateur portable",
-        description: "Ordinateur puissant pour le développement et les présentations.",
-        image: "https://via.placeholder.com/150?text=Ordinateur"
-      },
-      {
-        nom: "Projecteur",
-        description: "Utilisé pour projeter des présentations lors des réunions.",
-        image: "https://via.placeholder.com/150?text=Projecteur"
-      },
-      {
-        nom: "Caméra",
-        description: "Caméra haute définition pour la vidéoconférence.",
-        image: "https://via.placeholder.com/150?text=Caméra"
-      }
-    ];
-
-    const container = document.getElementById("materiels-container");
-
-    materiels.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <img src="${item.image}" alt="${item.nom}">
-        <div class="item-content">
-          <h2 class="item-title">${item.nom}</h2>
-          <p class="item-description">${item.description}</p>
-        </div>
-      `;
-      container.appendChild(div);
-    });
-
+        
     </script>
 </body>
 </html>
