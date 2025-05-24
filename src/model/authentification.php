@@ -1,5 +1,16 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Définir les chemins de base s'ils ne sont pas déjà définis
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/Clone/SAE201-203');
+}
+if (!defined('PUBLIC_URL')) {
+    define('PUBLIC_URL', BASE_URL . '/public');
+}
+
 require_once 'db_connect.php';
 
 class Authentification {
@@ -13,24 +24,35 @@ class Authentification {
     public function login($email, $password) {
         try {
             $stmt = $this->pdo->prepare("
-                SELECT ID_Utilisateur, Email, Mot_de_passe, Role, Est_Actif, Pseudo, Nom, Prenom 
-                FROM Utilisateur 
-                WHERE Email = ?
+                SELECT u.*, 
+                    CASE 
+                        WHEN e.ID_Utilisateur IS NOT NULL THEN 'Etudiant'
+                        WHEN en.ID_Utilisateur IS NOT NULL THEN 'Enseignant'
+                        WHEN a.ID_Utilisateur IS NOT NULL THEN 'Administrateur'
+                        ELSE u.Role
+                    END as Role_Effectif
+                FROM Utilisateur u
+                LEFT JOIN Etudiant e ON u.ID_Utilisateur = e.ID_Utilisateur
+                LEFT JOIN Enseignant en ON u.ID_Utilisateur = en.ID_Utilisateur
+                LEFT JOIN Administrateur a ON u.ID_Utilisateur = a.ID_Utilisateur
+                WHERE u.Email = ?
             ");
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($user && password_verify($password, $user['Mot_de_passe'])) {
                 if (!$user['Est_Actif']) {
-                    return ['success' => false, 'message' => 'Votre compte est désactivé.'];
+                    return ['success' => false, 'message' => 'Votre compte est en attente de validation par un administrateur.'];
                 }
                 
-                // Démarrer la session et stocker les informations
+                // Stocker toutes les informations importantes dans la session
                 $_SESSION['user_id'] = $user['ID_Utilisateur'];
-                $_SESSION['user_role'] = $user['Role'];
+                $_SESSION['user_role'] = $user['Role_Effectif'];
+                $_SESSION['user_email'] = $user['Email'];
                 $_SESSION['user_pseudo'] = $user['Pseudo'];
                 $_SESSION['user_nom'] = $user['Nom'];
                 $_SESSION['user_prenom'] = $user['Prenom'];
+                $_SESSION['est_actif'] = $user['Est_Actif'];
                 
                 return ['success' => true, 'user' => $user];
             }
@@ -43,21 +65,19 @@ class Authentification {
         }
     }
     
-    // Déconnexion
-    public function logout() {
-        session_unset();
-        session_destroy();
-        return ['success' => true, 'message' => 'Déconnexion réussie.'];
-    }
-    
     // Vérifier si l'utilisateur est connecté
     public function isLoggedIn() {
-        return isset($_SESSION['user_id']);
+        return isset($_SESSION['user_id']) && isset($_SESSION['user_role']);
     }
     
     // Vérifier le rôle de l'utilisateur
     public function hasRole($role) {
         return isset($_SESSION['user_role']) && $_SESSION['user_role'] === $role;
+    }
+    
+    // Vérifier si l'utilisateur est administrateur
+    public function isAdmin() {
+        return $this->hasRole('Administrateur');
     }
     
     // Récupérer les informations de l'utilisateur connecté
@@ -87,6 +107,13 @@ class Authentification {
         }
     }
     
+    // Déconnexion
+    public function logout() {
+        session_unset();
+        session_destroy();
+        return ['success' => true, 'message' => 'Déconnexion réussie.'];
+    }
+    
     // Inscription d'un nouvel utilisateur
     public function register($userData) {
         try {
@@ -102,7 +129,7 @@ class Authentification {
             // Insérer l'utilisateur de base
             $stmt = $this->pdo->prepare("
                 INSERT INTO Utilisateur (Email, Pseudo, Nom, Prenom, Mot_de_passe, Role, Est_Actif)
-                VALUES (?, ?, ?, ?, ?, ?, TRUE)
+                VALUES (?, ?, ?, ?, ?, ?, FALSE)
             ");
             
             $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
@@ -156,13 +183,29 @@ function checkPermission($requiredRole = null) {
     global $auth;
     
     if (!$auth->isLoggedIn()) {
-        header('Location: /public/connexion.php');
-        exit;
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+            return [
+                'success' => false,
+                'message' => 'Session expirée',
+                'error_code' => 4
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'Vous devez être connecté pour accéder à cette page.',
+                'error_code' => 4
+            ];
+        }
     }
     
     if ($requiredRole && !$auth->hasRole($requiredRole)) {
-        header('Location: /public/403.php');
-        exit;
+        return [
+            'success' => false,
+            'message' => 'Vous n\'avez pas les permissions nécessaires.',
+            'error_code' => 403
+        ];
     }
+    
+    return ['success' => true];
 }
 ?>

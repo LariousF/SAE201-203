@@ -54,26 +54,142 @@ footer {
 .bg-iut-blue {
 	background-color: #2a5d90;
 }
+
+.profile-header {
+	background: linear-gradient(135deg, #2a5d90 0%, #1e4b75 100%);
+	padding: 3rem 0;
+	margin-bottom: 2rem;
+	color: white;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .profile-circle {
 	width: 150px;
 	height: 150px;
 	border-radius: 50%;
-	background-color: white;
-	position:absolute;
-	margin:auto;
 	overflow: hidden;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	margin: 0 auto;
+	border: 4px solid rgba(255, 255, 255, 0.3);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 .profile-circle img {
 	width: 100%;
-	height: auto;
+	height: 100%;
+	object-fit: cover;
 }
+
+.profile-info-card {
+	height: 100%;
+	border: none;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	transition: transform 0.3s ease;
+}
+
+.profile-info-card:hover {
+	transform: translateY(-5px);
+}
+
+.profile-info-card .card-title {
+	color: #2a5d90;
+	font-weight: 600;
+	border-bottom: 2px solid #f0f0f0;
+	padding-bottom: 0.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.profile-info-card .info-label {
+	font-weight: 600;
+	color: #495057;
+	margin-bottom: 0.25rem;
+}
+
+.profile-info-card .info-value {
+	color: #6c757d;
+	margin-bottom: 1rem;
+}
+
+.profile-info-card .info-value a {
+	color: #2a5d90;
+	text-decoration: none;
+}
+
+.profile-info-card .info-value a:hover {
+	text-decoration: underline;
+}
+
 .info-box {
-	background-color: #f0f0f0;
-	padding: 15px;
+	background: white;
+	border-radius: 10px;
+	padding: 25px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-box .mb-3 {
+	padding-bottom: 15px;
+	border-bottom: 1px solid #eee;
+}
+
+.info-box .mb-3:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.info-box strong {
+	color: var(--iut-dark-blue);
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.info-box a {
+	color: var(--iut-blue);
+}
+
+.info-box a:hover {
+	color: var(--iut-light-blue);
+}
+
+.info-section {
+	margin-bottom: 30px;
+}
+
+.info-section-title {
+	color: var(--iut-dark-blue);
+	font-size: 1.2rem;
 	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid var(--iut-blue);
+}
+
+.info-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 15px;
+	font-size: 0.8rem;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.status-badge.student {
+	background-color: #e3f2fd;
+	color: #1976d2;
+}
+
+.status-badge.teacher {
+	background-color: #f3e5f5;
+	color: #7b1fa2;
+}
+
+.status-badge.admin {
+	background-color: #fff3e0;
+	color: #f57c00;
 }
 
 .logo-container {
@@ -122,6 +238,131 @@ footer {
 	max-height: 400px;
 	overflow-y: auto;
 }
+
+@media (max-width: 768px) {
+	.profile-circle {
+		width: 120px;
+		height: 120px;
+	}
+	
+	.info-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Couleurs personnalisées */
+:root {
+	--iut-blue: #004AAD;
+	--iut-light-blue: #0056cd;
+	--iut-dark-blue: #003c8a;
+}
+
+/* Classes générales */
+.bg-iut-blue {
+	background-color: var(--iut-blue);
+}
+
+/* Style du profil */
+.profile-circle {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	overflow: hidden;
+	margin: 0 auto;
+	border: 4px solid rgba(255, 255, 255, 0.3);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-circle img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.info-box {
+	background: white;
+	border-radius: 10px;
+	padding: 25px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-box .mb-3 {
+	padding-bottom: 15px;
+	border-bottom: 1px solid #eee;
+}
+
+.info-box .mb-3:last-child {
+	border-bottom: none;
+	padding-bottom: 0;
+}
+
+.info-box strong {
+	color: var(--iut-dark-blue);
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.info-box a {
+	color: var(--iut-blue);
+}
+
+.info-box a:hover {
+	color: var(--iut-light-blue);
+}
+
+/* Style des sections d'informations */
+.info-section {
+	margin-bottom: 30px;
+}
+
+.info-section-title {
+	color: var(--iut-dark-blue);
+	font-size: 1.2rem;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid var(--iut-blue);
+}
+
+.info-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+}
+
+/* Style des badges de statut */
 .status-badge {
-	width: 100px;
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 15px;
+	font-size: 0.8rem;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.status-badge.student {
+	background-color: #e3f2fd;
+	color: #1976d2;
+}
+
+.status-badge.teacher {
+	background-color: #f3e5f5;
+	color: #7b1fa2;
+}
+
+.status-badge.admin {
+	background-color: #fff3e0;
+	color: #f57c00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.profile-circle {
+		width: 120px;
+		height: 120px;
+	}
+	
+	.info-grid {
+		grid-template-columns: 1fr;
+	}
 }

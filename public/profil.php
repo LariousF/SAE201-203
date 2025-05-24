@@ -1,19 +1,30 @@
 <?php
-session_start();
-require_once '../src/model/db_connect.php';
-require_once '../src/model/authentification.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
- if (!$isLoggedIn) {
-     header('Location: connexion.php');
-     exit;
- }
- $stmt = $pdo->prepare("SELECT u.*, e.Numero_etudiant, e.Promotion
-                       FROM Utilisateur u
-                       LEFT JOIN Etudiant e ON u.ID_Utilisateur = e.ID_Utilisateur
-                       WHERE u.ID_Utilisateur = ?");
- $stmt->execute([$userId]);
- $userData = $stmt->fetch();
+// Définir le chemin absolu vers le dossier src
+define('ROOT_PATH', dirname(__DIR__));
 
+require_once ROOT_PATH . '/src/model/db_connect.php';
+require_once ROOT_PATH . '/src/model/authentification.php';
+
+// Débogage - Afficher les informations de session
+error_log('Session ID: ' . session_id());
+error_log('Session data: ' . print_r($_SESSION, true));
+
+// Vérifier si l'utilisateur est connecté
+if (!$auth->isLoggedIn()) {
+    $message = "Vous devez être connecté pour accéder à cette page.";
+    $message_type = 'danger';
+} else {
+    // Récupérer les informations de l'utilisateur
+    $user = $auth->getCurrentUser();
+    if (!$user) {
+        $message = "Erreur lors de la récupération des informations utilisateur.";
+        $message_type = 'danger';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -29,7 +40,7 @@ require_once '../src/model/authentification.php';
 </head>
 <body>
     <div class="bg-light min-vh-100 d-flex flex-column">
-    <header class="bg-white border-bottom">
+        <header class="bg-white border-bottom">
             <nav class="container navbar navbar-expand-lg navbar-light py-4">
                 <div class="container-fluid px-0">
                     <a class="navbar-logo me-4" href="index.php">
@@ -42,14 +53,15 @@ require_once '../src/model/authentification.php';
 
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto align-items-center">
-                            <?php if (isset($userRole) && $userRole === 'Admin'): ?>
+                            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Administrateur'): ?>
                                 <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                                     <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                        <i class="bi bi-gear-fill"></i> Tableau de bord Admin </a>
+                                        <i class="bi bi-gear-fill"></i> Tableau de bord Admin
+                                    </a>
                                 </li>
                             <?php endif; ?>
                             <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                <a href="logout.php" class="btn btn-outline-danger btn-sm">
+                                <a href="deconnexion.php" class="btn btn-outline-danger btn-sm">
                                     <i class="bi bi-box-arrow-right"></i> DÉCONNEXION
                                 </a>
                             </li>
@@ -57,52 +69,146 @@ require_once '../src/model/authentification.php';
                     </div>
                 </div>
             </nav>
-    </header>
+        </header>
 
-    <main class="flex-grow-1">
-            <section class="bg-iut-blue text-white py-4">
-                <div class="container py-3">
-                    <div class="row align-items-center">
-                        <div class="col-md-3 text-center">
-                            <div class="profile-circle mb-3">
-                                <img src="#" alt="Avatar" class="img-fluid">
-                            </div>
-                        </div>
-                        <div class="col-md-9 text-md-start text-center">
-                            <h2 class="mb-1">Prenom</h2>
-                            <h3 class="h4 mb-0">Nom</h3>
-                        </div>
+        <main class="flex-grow-1">
+            <?php if (isset($message)): ?>
+                <div class="container mt-3">
+                    <div class="alert alert-<?php echo $message_type; ?>" role="alert">
+                        <?php echo htmlspecialchars($message); ?>
                     </div>
                 </div>
-            </section>
+            <?php endif; ?>
 
-            <section class="py-4">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 mb-4 mb-md-0">
-                            <div class="info-box">
-                                <div class="mb-3">
-                                    <strong>Adresse mail</strong><br>
-                                    <a href="mailto:#" class="text-decoration-none">#</a>
-                                </div>
-                                <div class="mb-3">
-                                    <strong>Identifiant</strong><br>
-                                    #
-                                </div>
-                                <div class="mb-3">
-                                    <strong>Adresse postale</strong><br>
-                                    #
-                                </div>
-                                <div class="mb-3">
-                                    <strong>Rôle</strong><br>
-                                    #
+            <?php if ($auth->isLoggedIn() && $user): ?>
+                <section class="bg-iut-blue text-white py-4">
+                    <div class="container py-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center">
+                                <div class="profile-circle mb-3">
+                                    <img src="images/default-avatar.png" alt="Avatar" class="img-fluid">
                                 </div>
                             </div>
+                            <div class="col-md-9 text-md-start text-center">
+                                <h2 class="mb-1"><?php echo htmlspecialchars($user['Prenom']); ?></h2>
+                                <h3 class="h4 mb-0"><?php echo htmlspecialchars($user['Nom']); ?></h3>
+                            </div>
                         </div>
-    </main>
-    <footer class="bg-white pt-5 pb-4">
-        <div class="container">
-            <div class="row g-4">
+                    </div>
+                </section>
+
+                <section class="py-4">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="info-section">
+                                    <h4 class="info-section-title">Informations Générales</h4>
+                                    <div class="info-grid">
+                                        <div class="info-box">
+                                            <div class="mb-3">
+                                                <strong>Adresse mail</strong><br>
+                                                <a href="mailto:<?php echo htmlspecialchars($user['Email']); ?>" class="text-decoration-none">
+                                                    <?php echo htmlspecialchars($user['Email']); ?>
+                                                </a>
+                                            </div>
+                                            <div class="mb-3">
+                                                <strong>Identifiant</strong><br>
+                                                <?php echo htmlspecialchars($user['Pseudo']); ?>
+                                            </div>
+                                            <div class="mb-3">
+                                                <strong>Rôle</strong><br>
+                                                <span class="status-badge <?php 
+                                                    echo strtolower($user['Role']) === 'etudiant' ? 'student' : 
+                                                        (strtolower($user['Role']) === 'enseignant' ? 'teacher' : 'admin'); 
+                                                ?>">
+                                                    <?php echo htmlspecialchars($user['Role']); ?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <?php if ($user['Role'] === 'Etudiant'): ?>
+                                <div class="info-section">
+                                    <h4 class="info-section-title">Informations Étudiant</h4>
+                                    <div class="info-grid">
+                                        <div class="info-box">
+                                            <div class="mb-3">
+                                                <strong>Numéro étudiant</strong><br>
+                                                <?php echo htmlspecialchars($user['Numero_etudiant']); ?>
+                                            </div>
+                                            <div class="mb-3">
+                                                <strong>Promotion</strong><br>
+                                                <?php echo htmlspecialchars($user['Promotion']); ?>
+                                            </div>
+                                            <?php if (isset($user['TD'])): ?>
+                                            <div class="mb-3">
+                                                <strong>Groupe TD</strong><br>
+                                                <?php echo htmlspecialchars($user['TD']); ?>
+                                            </div>
+                                            <?php endif; ?>
+                                            <?php if (isset($user['TP'])): ?>
+                                            <div class="mb-3">
+                                                <strong>Groupe TP</strong><br>
+                                                <?php echo htmlspecialchars($user['TP']); ?>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php elseif ($user['Role'] === 'Enseignant'): ?>
+                                <div class="info-section">
+                                    <h4 class="info-section-title">Informations Enseignant</h4>
+                                    <div class="info-grid">
+                                        <div class="info-box">
+                                            <div class="mb-3">
+                                                <strong>Qualification</strong><br>
+                                                <?php echo htmlspecialchars($user['Qualification']); ?>
+                                            </div>
+                                            <div class="mb-3">
+                                                <strong>Fonction</strong><br>
+                                                <?php echo htmlspecialchars($user['Fonction']); ?>
+                                            </div>
+                                            <?php if (isset($user['Bureau'])): ?>
+                                            <div class="mb-3">
+                                                <strong>Bureau</strong><br>
+                                                <?php echo htmlspecialchars($user['Bureau']); ?>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php elseif ($user['Role'] === 'Administrateur'): ?>
+                                <div class="info-section">
+                                    <h4 class="info-section-title">Informations Administrateur</h4>
+                                    <div class="info-grid">
+                                        <div class="info-box">
+                                            <?php if (isset($user['Bureau'])): ?>
+                                            <div class="mb-3">
+                                                <strong>Bureau</strong><br>
+                                                <?php echo htmlspecialchars($user['Bureau']); ?>
+                                            </div>
+                                            <?php endif; ?>
+                                            <div class="mb-3">
+                                                <strong>Responsabilités</strong><br>
+                                                Gestion des utilisateurs<br>
+                                                Gestion du matériel<br>
+                                                Validation des réservations
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            <?php endif; ?>
+        </main>
+
+        <footer class="bg-white pt-5 pb-4">
+            <div class="container">
+                <div class="row g-4">
                     <div class="col-lg-3 col-md-6">
                         <h5>Qui sommes nous ?</h5>
                         <p>Université Gustave Eiffel<br>
@@ -122,15 +228,18 @@ require_once '../src/model/authentification.php';
                         Email: cipen@univ-eiffel.fr</p>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                    <h5>Suivez nous</h5>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        <h5>Suivez nous</h5>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                        </div>
                     </div>
-                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

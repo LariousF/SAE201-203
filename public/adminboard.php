@@ -1,3 +1,49 @@
+<?php
+// Activer l'affichage des erreurs
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Définir le chemin racine
+define('ROOT_PATH', dirname(__DIR__));
+
+// Inclure les fichiers essentiels
+require_once ROOT_PATH . '/src/model/connexion_bdd.php';
+require_once ROOT_PATH . '/src/model/authentification.php';
+
+// Vérifier l'authentification et les droits d'administrateur
+if (!$auth->isLoggedIn()) {
+    $message = "Vous devez être connecté pour accéder à cette page.";
+    $message_type = 'danger';
+} elseif (!$auth->isAdmin()) {
+    $message = "Vous n'avez pas les droits d'accès à cette page.";
+    $message_type = 'danger';
+}
+
+// Si l'utilisateur n'est pas authentifié ou n'est pas admin, afficher un message d'erreur
+if (isset($message)) {
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur d'accès</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="alert alert-<?php echo $message_type; ?>">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+        <a href="index.php" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
+</body>
+</html>
+<?php
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,7 +52,6 @@
     <title>Tableau de Bord Administrateur</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-light">
@@ -78,20 +123,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Martin Dupont</td>
-                                                <td>martin.dupont@univ-eiffel.fr</td>
-                                                <td>Étudiant</td>
-                                                <td>2024-01-15</td>
-                                                <td>
-                                                    <button class="btn btn-success btn-sm" onclick="validerCompte(1)">
-                                                        <i class="bi bi-check-lg"></i>
-                                                    </button>
-                                                    <button class="btn btn-danger btn-sm" onclick="refuserCompte(1)">
-                                                        <i class="bi bi-x-lg"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            <!-- Le contenu sera chargé dynamiquement par JavaScript -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -121,20 +153,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Oculus Quest 2</td>
-                                                <td>VR</td>
-                                                <td><span class="badge bg-success">Disponible</span></td>
-                                                <td>
-                                                    <button class="btn btn-warning btn-sm" onclick="modifierMateriel(1)">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </button>
-                                                    <button class="btn btn-danger btn-sm" onclick="supprimerMateriel(1)">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            <!-- Le contenu sera chargé dynamiquement par JavaScript -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -161,20 +180,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Sophie Martin</td>
-                                                <td>Salle 101</td>
-                                                <td>2024-01-20 14:00</td>
-                                                <td>2024-01-20 16:00</td>
-                                                <td>
-                                                    <button class="btn btn-success btn-sm" onclick="validerReservation(1)">
-                                                        <i class="bi bi-check-lg"></i>
-                                                    </button>
-                                                    <button class="btn btn-danger btn-sm" onclick="refuserReservation(1)">
-                                                        <i class="bi bi-x-lg"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            <!-- Le contenu sera chargé dynamiquement par JavaScript -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -201,13 +207,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>HTC Vive</td>
-                                                <td>Pierre Dubois</td>
-                                                <td>2024-01-18</td>
-                                                <td><span class="badge bg-warning">Léger défaut</span></td>
-                                                <td>Rayure sur la lentille droite</td>
-                                            </tr>
+                                            <!-- Le contenu sera chargé dynamiquement par JavaScript -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -266,226 +266,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Fonctions de gestion des comptes
-        function validerCompte(id) {
-            if(confirm('Confirmer la validation de ce compte ?')) {
-                const formData = new FormData();
-                formData.append('id', id);
-                formData.append('action', 'valider');
-                
-                fetch('../src/admin/valider_compte.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    if(result === 'success') {
-                        alert('Compte validé avec succès');
-                        location.reload();
-                    } else {
-                        alert('Erreur lors de la validation');
-                    }
-                });
-            }
-        }
-
-        function refuserCompte(id) {
-            if(confirm('Confirmer le refus de ce compte ?')) {
-                const formData = new FormData();
-                formData.append('id', id);
-                formData.append('action', 'refuser');
-                
-                fetch('../src/admin/valider_compte.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    if(result === 'success') {
-                        alert('Compte refusé');
-                        location.reload();
-                    } else {
-                        alert('Erreur lors du refus');
-                    }
-                });
-            }
-        }
-
-        // Fonctions de gestion du matériel
-        function modifierMateriel(id) {
-            const formData = new FormData();
-            formData.append('id', id);
-            formData.append('action', 'get');
-            
-            fetch('../src/admin/gestion_materiel.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(result => {
-                if(result !== 'error') {
-                    const materiel = unserialize(result);
-                    const modal = document.getElementById('ajoutMaterielModal');
-                    
-                    // Remplir le formulaire
-                    modal.querySelector('[name="nom"]').value = materiel.nom;
-                    modal.querySelector('[name="categorie"]').value = materiel.categorie;
-                    modal.querySelector('[name="description"]').value = materiel.description;
-                    modal.querySelector('[name="etat"]').value = materiel.etat;
-                    
-                    // Changer le titre et l'action
-                    modal.querySelector('.modal-title').textContent = 'Modifier le matériel';
-                    const form = modal.querySelector('form');
-                    form.dataset.action = 'modifier';
-                    form.dataset.id = id;
-                    
-                    new bootstrap.Modal(modal).show();
-                }
-            });
-        }
-
-        function supprimerMateriel(id) {
-            if(confirm('Êtes-vous sûr de vouloir supprimer ce matériel ?')) {
-                const formData = new FormData();
-                formData.append('id', id);
-                formData.append('action', 'supprimer');
-                
-                fetch('../src/admin/gestion_materiel.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    if(result === 'success') {
-                        alert('Matériel supprimé avec succès');
-                        location.reload();
-                    } else {
-                        alert('Erreur lors de la suppression');
-                    }
-                });
-            }
-        }
-
-        function sauvegarderMateriel() {
-            const form = document.getElementById('materielForm');
-            if(form.checkValidity()) {
-                const formData = new FormData(form);
-                formData.append('action', form.dataset.action || 'ajouter');
-                if(form.dataset.id) {
-                    formData.append('id', form.dataset.id);
-                }
-                
-                fetch('../src/admin/gestion_materiel.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    if(result === 'success') {
-                        alert('Matériel sauvegardé avec succès');
-                        bootstrap.Modal.getInstance(document.getElementById('ajoutMaterielModal')).hide();
-                        location.reload();
-                    } else {
-                        alert('Erreur lors de la sauvegarde');
-                    }
-                });
-            } else {
-                form.reportValidity();
-            }
-        }
-
-        // Fonctions de gestion des réservations
-        function validerReservation(id) {
-            if(confirm('Confirmer la validation de cette réservation ?')) {
-                const formData = new FormData();
-                formData.append('id', id);
-                formData.append('action', 'valider');
-                
-                fetch('../src/admin/valider_reservation.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    if(result === 'success') {
-                        alert('Réservation validée avec succès');
-                        location.reload();
-                    } else {
-                        alert('Erreur lors de la validation');
-                    }
-                });
-            }
-        }
-
-        function refuserReservation(id) {
-            if(confirm('Confirmer le refus de cette réservation ?')) {
-                const formData = new FormData();
-                formData.append('id', id);
-                formData.append('action', 'refuser');
-                
-                fetch('../src/admin/valider_reservation.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(result => {
-                    if(result === 'success') {
-                        alert('Réservation refusée');
-                        location.reload();
-                    } else {
-                        alert('Erreur lors du refus');
-                    }
-                });
-            }
-        }
-
-        // Fonction utilitaire pour désérialiser les données PHP
-        function unserialize(data) {
-            const str = data.replace(/\n/g, '');
-            const pairs = str.split(';');
-            const obj = {};
-            
-            for(let i = 0; i < pairs.length; i++) {
-                const pair = pairs[i].split(':');
-                if(pair.length === 2) {
-                    obj[pair[0]] = pair[1];
-                }
-            }
-            
-            return obj;
-        }
-
-        // Charger les données au chargement de la page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Charger les comptes en attente
-            fetch('../src/admin/valider_compte.php')
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('#validation-comptes tbody').innerHTML = html;
-                });
-
-            // Charger le matériel
-            fetch('../src/admin/gestion_materiel.php')
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('#gestion-materiel tbody').innerHTML = html;
-                });
-
-            // Charger les réservations en attente
-            fetch('../src/admin/valider_reservation.php')
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('#validation-reservations tbody').innerHTML = html;
-                });
-
-            // Charger les retours de matériel
-            fetch('../src/admin/gestion_retours.php')
-                .then(response => response.text())
-                .then(html => {
-                    document.querySelector('#retours-materiels tbody').innerHTML = html;
-                });
-        });
-    </script>
+    <script src="js/admin.js"></script>
 </body>
 </html> 

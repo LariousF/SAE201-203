@@ -4,28 +4,73 @@ require_once '../src/model/authentification.php';
 
 $message = '';
 
+// Affichage temporaire pour débogage
+echo "<pre>";
+echo "Session actuelle : ";
+print_r($_SESSION);
+echo "</pre>";
+
 // Si l'utilisateur est déjà connecté, le rediriger vers l'accueil
 if ($auth->isLoggedIn()) {
     header('Location: index.php');
     exit;
 }
 
-//Traitement du formulaire
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Traitement du formulaire
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-    
+
+    // Vérification de base
     if (!empty($email) && !empty($password)) {
-        $result = $auth->login($email, $password);
-        
-        if ($result['success']) {
-            header("Location: index.php");
-            exit;
-        } else {
-            $message = $result['message'];
+        try {
+            // Recherche de l'utilisateur par email avec son rôle effectif
+            $stmt = $pdo->prepare("
+                SELECT u.*, 
+                    CASE 
+                        WHEN e.ID_Utilisateur IS NOT NULL THEN 'Etudiant'
+                        WHEN en.ID_Utilisateur IS NOT NULL THEN 'Enseignant'
+                        WHEN a.ID_Utilisateur IS NOT NULL THEN 'Administrateur'
+                        ELSE u.Role
+                    END as Role_Effectif
+                FROM Utilisateur u
+                LEFT JOIN Etudiant e ON u.ID_Utilisateur = e.ID_Utilisateur
+                LEFT JOIN Enseignant en ON u.ID_Utilisateur = en.ID_Utilisateur
+                LEFT JOIN Administrateur a ON u.ID_Utilisateur = a.ID_Utilisateur
+                WHERE u.Email = ?
+            ");
+            $stmt->execute([$email]);
+            $utilisateur = $stmt->fetch();
+
+            // Vérification du mot de passe et du compte actif
+            if ($utilisateur && password_verify($password, $utilisateur['Mot_de_passe'])) {
+                if (!$utilisateur['Est_Actif']) {
+                    $message = "Votre compte est en attente de validation par un administrateur.";
+                    $message_type = 'warning';
+                } else {
+                    // Authentification réussie
+                    $_SESSION['user_id'] = $utilisateur['ID_Utilisateur'];
+                    $_SESSION['email'] = $utilisateur['Email'];
+                    $_SESSION['user_role'] = $utilisateur['Role_Effectif'];
+                    $_SESSION['user_pseudo'] = $utilisateur['Pseudo'];
+                    $_SESSION['user_nom'] = $utilisateur['Nom'];
+                    $_SESSION['user_prenom'] = $utilisateur['Prenom'];
+                    $_SESSION['est_actif'] = $utilisateur['Est_Actif'];
+                    header("Location: index.php");
+                    exit;
+                }
+            } else {
+                $message = "Email ou mot de passe incorrect.";
+                $message_type = 'danger';
+            }
+        } catch (PDOException $e) {
+            $message = "Une erreur est survenue lors de la connexion.";
+            $message_type = 'danger';
+            error_log("Erreur de connexion : " . $e->getMessage());
         }
     } else {
-        $message = "Veuillez remplir tous les champs";
+        $message = "Veuillez remplir tous les champs.";
+        $message_type = 'danger';
     }
 }
 ?>
@@ -47,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h1 class="text-center mb-4">Connexion</h1>
         
         <?php if (!empty($message)): ?>
-            <div class="alert <?php echo strpos($message, 'succès') !== false ? 'alert-success' : 'alert-danger'; ?> mb-3">
+            <div class="alert <?php echo strpos($message, 'réussie') !== false ? 'alert-success' : 'alert-danger'; ?> mb-3">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>

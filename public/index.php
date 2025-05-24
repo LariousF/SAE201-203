@@ -2,6 +2,9 @@
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
 
+// Vérifier si l'utilisateur est connecté
+$isLoggedIn = $auth->isLoggedIn();
+$isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Administrateur';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -24,22 +27,37 @@ require_once '../src/model/authentification.php';
                         <img src="images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" class="img-fluid" style="max-width: 200px; height: auto;">
                     </a>
 
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto align-items-center">
-                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                <a href="profil.php" class="btn btn-outline-secondary btn-sm">
-                                    <i class="bi bi-person-fill"></i> PROFIL
-                                </a>
-                            </li>
-                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                                <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                    <i class="bi bi-person-fill"></i> Tableau de bord Admin
-                                </a>
-                            </li>
+                            <?php if ($isLoggedIn): ?>
+                                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                    <a href="profil.php" class="btn btn-outline-secondary btn-sm">
+                                        <i class="bi bi-person-fill"></i> PROFIL
+                                    </a>
+                                </li>
+                                <?php if ($isAdmin): ?>
+                                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                        <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
+                                            <i class="bi bi-gear-fill"></i> Tableau de bord Admin
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
+                                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                    <a href="deconnexion.php" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-box-arrow-right"></i> Déconnexion
+                                    </a>
+                                </li>
+                            <?php else: ?>
+                                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                    <a href="connexion.php" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-box-arrow-in-right"></i> Connexion
+                                    </a>
+                                </li>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>

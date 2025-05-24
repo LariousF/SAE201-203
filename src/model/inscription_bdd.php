@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+// Définir les chemins de base s'ils ne sont pas déjà définis
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/Clone/SAE201-203');
+}
+if (!defined('PUBLIC_URL')) {
+    define('PUBLIC_URL', BASE_URL . '/public');
+}
+
 require_once 'db_connect.php';
 
 ini_set('display_errors', 1);
@@ -13,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom = trim($_POST['prenom'] ?? '');
     $mot_de_passe = $_POST['mot_de_passe'] ?? '';
     $confirm_mot_de_passe = $_POST['confirm_mot_de_passe'] ?? '';
-    $date_naissance_str = $_POST['date_naissance'] ?? '';
+    $date_naissance_str = trim($_POST['date_naissance'] ?? '');
     $adresse_postale = trim($_POST['adresse_postale'] ?? '');
     $role = trim($_POST['role'] ?? '');
 
@@ -24,14 +33,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($pseudo)) { $errors[] = "Le pseudo est requis."; }
     if (empty($nom)) { $errors[] = "Le nom est requis."; }
     if (empty($prenom)) { $errors[] = "Le prénom est requis."; }
-    if (empty($date_naissance_str)) { $errors[] = "La date de naissance est requise."; }
-    if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $date_naissance_str) && !empty($date_naissance_str)) {
+    
+    // Validation améliorée de la date de naissance
+    if (empty($date_naissance_str)) {
+        $errors[] = "La date de naissance est requise.";
+    } elseif (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $date_naissance_str)) {
         $errors[] = "Le format de la date de naissance n'est pas valide (AAAA-MM-JJ).";
     } else {
-        $date_naissance = $date_naissance_str;
+        $date_obj = DateTime::createFromFormat('Y-m-d', $date_naissance_str);
+        if (!$date_obj || $date_obj->format('Y-m-d') !== $date_naissance_str) {
+            $errors[] = "La date de naissance n'est pas valide.";
+        } else {
+            $date_naissance = $date_naissance_str;
+        }
     }
 
-    if (empty($adresse_postale)) { $errors[] = "L'adresse postale est requise."; }
+    // Validation améliorée de l'adresse postale
+    if (empty($adresse_postale)) {
+        $errors[] = "L'adresse postale est requise.";
+    } elseif (strlen($adresse_postale) < 10) {
+        $errors[] = "L'adresse postale doit contenir au moins 10 caractères.";
+    }
+
     if (empty($role) || !in_array($role, ['Etudiant', 'Enseignant', 'Administrateur', 'Agent'])) {
         $errors[] = "Veuillez sélectionner un rôle valide.";
     }
@@ -75,8 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($errors)) {
         $_SESSION['form_message'] = implode("<br>", $errors);
         $_SESSION['form_message_type'] = 'danger';
-        header('Location: ../../public/inscription.php');
-        exit;
+        return ['success' => false, 'message' => 'Une erreur est survenue lors de l\'inscription.'];
     }
 
     $hash_password = password_hash($mot_de_passe, PASSWORD_DEFAULT);
@@ -140,10 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        $_SESSION['form_message'] = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
-        $_SESSION['form_message_type'] = 'success';
-        header('Location: ../../public/connexion.php');
-        exit;
+        return ['success' => true, 'message' => 'Inscription réussie ! Vous pouvez maintenant vous connecter.'];
 
     } catch (PDOException $e) {
         $pdo->rollBack();
@@ -153,13 +172,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              $_SESSION['form_message'] = "Erreur lors de l'inscription : " . $e->getMessage();
         }
         $_SESSION['form_message_type'] = 'danger';
-        header('Location: ../../public/inscription.php');
-        exit;
+        return ['success' => false, 'message' => 'Une erreur est survenue lors de l\'inscription.'];
     }
 } else {
     $_SESSION['form_message'] = "Méthode non autorisée pour accéder à cette page.";
     $_SESSION['form_message_type'] = 'warning';
-    header('Location: ../../public/inscription.php');
-    exit;
+    return ['success' => false, 'message' => 'Méthode non autorisée pour accéder à cette page.'];
 }
 ?>

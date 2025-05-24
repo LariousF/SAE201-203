@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const roleSelect = document.getElementById('role');
     const etudiantFields = document.getElementById('champsEtudiant');
     const enseignantFields = document.getElementById('champsEnseignant');
-    const adminFields = document.getElementById('champsAgent');
+    const agentFields = document.getElementById('champsAgent');
 
     const allSpecificFieldsContainers = [etudiantFields, enseignantFields, agentFields];
 
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 container.style.display = 'none';
                 container.querySelectorAll('input, select, textarea').forEach(input => {
                     input.required = false;
+                    input.disabled = true;
                 });
             }
         });
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
             currentFieldsContainer.style.display = 'block';
             currentFieldsContainer.querySelectorAll('input, select, textarea').forEach(input => {
                 input.required = true;
+                input.disabled = false;
             });
         }
     }
