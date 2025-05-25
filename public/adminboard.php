@@ -215,7 +215,7 @@ if (isset($message)) {
         </div>
     </div>
 
-    <!-- Modal Ajout/Modification Matériel -->
+    <!-- Modal Ajout Matériel -->
     <div class="modal fade" id="ajoutMaterielModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -224,38 +224,111 @@ if (isset($message)) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="materielForm">
+                    <form id="ajoutMaterielForm">
                         <div class="mb-3">
-                            <label class="form-label">Nom du matériel</label>
-                            <input type="text" class="form-control" name="nom" required>
+                            <label class="form-label">Référence</label>
+                            <input type="text" class="form-control" name="reference" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Catégorie</label>
-                            <select class="form-select" name="categorie" required>
-                                <option value="">Sélectionner une catégorie</option>
+                            <label class="form-label">Désignation</label>
+                            <input type="text" class="form-control" name="designation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" name="type" required>
+                                <option value="">Sélectionner un type</option>
                                 <option value="VR">VR</option>
                                 <option value="Audio">Audio</option>
-                                <option value="Video">Vidéo</option>
-                                <option value="Informatique">Informatique</option>
+                                <option value="Vidéo">Vidéo</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Tablette">Tablette</option>
+                                <option value="Drone">Drone</option>
+                                <option value="Support">Support</option>
+                                <option value="Périphérique">Périphérique</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Description</label>
-                            <textarea class="form-control" name="description" rows="3"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">État</label>
                             <select class="form-select" name="etat" required>
-                                <option value="disponible">Disponible</option>
-                                <option value="maintenance">En maintenance</option>
-                                <option value="reserve">Réservé</option>
+                                <option value="Très bon">Très bon</option>
+                                <option value="Bon">Bon</option>
+                                <option value="En panne">En panne</option>
+                                <option value="Réparation">En réparation</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantité</label>
+                            <input type="number" class="form-control" name="quantite" required min="1" value="1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="descriptif" rows="3"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary" onclick="sauvegarderMateriel()">Sauvegarder</button>
+                    <button type="button" class="btn btn-primary" onclick="ajouterMateriel()">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Modification Matériel -->
+    <div class="modal fade" id="modifMaterielModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le Matériel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modifMaterielForm">
+                        <input type="hidden" name="id">
+                        <div class="mb-3">
+                            <label class="form-label">Référence</label>
+                            <input type="text" class="form-control" name="reference" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Désignation</label>
+                            <input type="text" class="form-control" name="designation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" name="type" required>
+                                <option value="">Sélectionner un type</option>
+                                <option value="VR">VR</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Vidéo">Vidéo</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Tablette">Tablette</option>
+                                <option value="Drone">Drone</option>
+                                <option value="Support">Support</option>
+                                <option value="Périphérique">Périphérique</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">État</label>
+                            <select class="form-select" name="etat" required>
+                                <option value="Très bon">Très bon</option>
+                                <option value="Bon">Bon</option>
+                                <option value="En panne">En panne</option>
+                                <option value="Réparation">En réparation</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantité</label>
+                            <input type="number" class="form-control" name="quantite" required min="1" value="1">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="descriptif" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="sauvegarderModification()">Enregistrer</button>
                 </div>
             </div>
         </div>
@@ -263,5 +336,6 @@ if (isset($message)) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/admin.js"></script>
+    <script src="js/gestion_materiel.js"></script>
 </body>
 </html> 

@@ -104,6 +104,38 @@ $isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'
                     </div>
                 </div>
             </section>
+
+            <?php if ($isLoggedIn): ?>
+            <section class="py-5 bg-white">
+                <div class="container">
+                    <h2 class="text-center mb-4">Mes Réservations</h2>
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">État de mes demandes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Ressource</th>
+                                            <th>Date début</th>
+                                            <th>Date fin</th>
+                                            <th>Statut</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reservationsTableBody">
+                                        <!-- Le contenu sera chargé dynamiquement par JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <?php endif; ?>
         </main>
 
         <footer class="bg-white pt-5 pb-4">
@@ -139,4 +171,9 @@ $isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'
             </div>
         </footer>
     </div>
-    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <?php if ($isLoggedIn): ?>
+    <script src="js/reservations.js"></script>
+    <?php endif; ?>
+</body>
+</html>

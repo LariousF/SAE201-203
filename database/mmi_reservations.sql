@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 24 mai 2025 à 21:38
+-- Généré le : dim. 25 mai 2025 à 09:58
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -77,6 +77,13 @@ CREATE TABLE `enseignant` (
   `Telephone_pro_enseignant` varchar(20) DEFAULT NULL COMMENT 'Numéro de téléphone professionnel de l enseignant'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Déchargement des données de la table `enseignant`
+--
+
+INSERT INTO `enseignant` (`ID_Utilisateur`, `Qualification`, `Fonction`, `Telephone_pro_enseignant`) VALUES
+(4, 'Cordon', 'Bleu', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -116,6 +123,32 @@ CREATE TABLE `materiel` (
   `Photo_Path` varchar(255) DEFAULT NULL COMMENT 'Chemin relatif ou URL de la photo principale',
   `Lien_Demo` varchar(512) DEFAULT NULL COMMENT 'URL vers une vidéo ou page de démonstration'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `materiel`
+--
+
+INSERT INTO `materiel` (`ID_Materiel`, `Reference_Materiel`, `Designation`, `Type_Materiel`, `Date_Achat`, `Etat_Global`, `Quantite_Totale`, `Descriptif`, `Photo_Path`, `Lien_Demo`) VALUES
+(1, 'VR-META-01', 'Casque VR Meta', 'VR', NULL, 'Bon', 1, 'Casque de réalité virtuelle Meta Quest', 'images/casque vr meta.jpg', NULL),
+(2, 'VR-META-MAN-01', 'Manettes VR Meta', 'VR', NULL, 'Bon', 2, 'Paire de manettes pour casque VR Meta Quest', 'images/manette vr meta.jpg', NULL),
+(3, 'VR-OCULUS-01', 'Casque VR Oculus', 'VR', NULL, 'Bon', 1, 'Casque de réalité virtuelle Oculus', 'images/casque vr occulus.JPG', NULL),
+(4, 'VR-OCULUS-MAN-01', 'Manettes VR Oculus', 'VR', NULL, 'Bon', 2, 'Paire de manettes pour casque VR Oculus', 'images/manettes vr occulus.JPG', NULL),
+(5, 'VR-CABLE-01', 'Câble VR', 'VR', NULL, 'Bon', 1, 'Câble de connexion pour casque VR', 'images/cable vr.JPG', NULL),
+(6, 'AUDIO-CASQUE-01', 'Casque Audio', 'Audio', NULL, 'Bon', 1, 'Casque audio professionnel', 'images/casque audio.jpg', NULL),
+(7, 'AUDIO-CASQUE-02', 'Casque Audio 2', 'Audio', NULL, 'Bon', 1, 'Casque audio professionnel', 'images/casque audio 02.JPG', NULL),
+(8, 'AUDIO-MICRO-01', 'Microphone', 'Audio', NULL, 'Bon', 1, 'Microphone professionnel', 'images/micro.jpg', NULL),
+(9, 'VIDEO-CAM-GOPRO-01', 'Caméra GoPro', 'Vidéo', NULL, 'Bon', 1, 'Caméra d\'action GoPro', 'images/camera go pro.jpg', NULL),
+(10, 'VIDEO-CAM-SONNETTE-01', 'Caméra Sonnette', 'Vidéo', NULL, 'Bon', 1, 'Caméra de type sonnette connectée', 'images/camera sonette.JPG', NULL),
+(11, 'VIDEO-PROJ-01', 'Vidéoprojecteur', 'Vidéo', NULL, 'Bon', 1, 'Vidéoprojecteur professionnel', 'images/video projecteur .jpg', NULL),
+(12, 'VIDEO-PIED-01', 'Pied Caméra', 'Vidéo', NULL, 'Bon', 1, 'Pied/Trépied pour caméra', 'images/pied camera.jpg', NULL),
+(13, 'VIDEO-PERCHE-01', 'Perche', 'Vidéo', NULL, 'Bon', 1, 'Perche pour prise de vue', 'images/perche 02.JPG', NULL),
+(14, 'VIDEO-WEBCAM-01', 'Webcam', 'Vidéo', NULL, 'Bon', 1, 'Webcam haute définition', 'images/Webcam.JPG', NULL),
+(15, 'GAMING-MANETTE-01', 'Manette de Jeux', 'Gaming', NULL, 'Bon', 1, 'Manette de jeux vidéo', 'images/manette jeux .jpg', NULL),
+(16, 'TAB-GRAPH-01', 'Tablette Graphique', 'Tablette', NULL, 'Bon', 1, 'Tablette graphique pour dessin numérique', 'images/tablette graphique.JPG', NULL),
+(17, 'TAB-AND-01', 'Tablette Android', 'Tablette', NULL, 'Bon', 1, 'Tablette Android', 'images/tablette android.JPG', NULL),
+(18, 'DRONE-01', 'Drone', 'Drone', NULL, 'Bon', 1, 'Drone pour prise de vue aérienne', 'images/drone .JPG', NULL),
+(19, 'SUPPORT-01', 'Support', 'Support', NULL, 'Bon', 1, 'Support universel', 'images/support.JPG', NULL),
+(20, 'LOGITECH-01', 'Équipement Logitech', 'Périphérique', NULL, 'Bon', 1, 'Périphérique Logitech', 'images/logitech 01.JPG', NULL);
 
 -- --------------------------------------------------------
 
@@ -157,6 +190,21 @@ CREATE TABLE `reservation` (
   `Signature_Gestionnaire` text DEFAULT NULL COMMENT 'Placeholder pour la signature électronique du gestionnaire'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Déchargement des données de la table `reservation`
+--
+
+INSERT INTO `reservation` (`ID_Reservation`, `ID_Demandeur`, `ID_Materiel`, `Quantite_Reservee`, `ID_Salle`, `Date_Debut`, `Date_Fin`, `Motif`, `Liste_Participants`, `Commentaire_Demandeur`, `Statut`, `Date_Demande`, `ID_Gestionnaire`, `Date_Decision`, `Commentaire_Gestionnaire`, `Signature_Demandeur`, `Signature_Gestionnaire`) VALUES
+(1, 3, 1, 1, NULL, '2025-05-30 11:00:00', '2025-05-30 15:00:00', 'Réservation de matériel VR', NULL, NULL, 'Refusée', '2025-05-24 23:13:15', 2, '2025-05-24 23:19:25', NULL, NULL, NULL),
+(2, 3, 1, 1, NULL, '2025-05-29 12:15:00', '2025-05-29 15:45:00', 'Réservation de matériel VR', NULL, NULL, 'Validée', '2025-05-24 23:15:47', 2, '2025-05-24 23:19:20', NULL, NULL, NULL),
+(3, 3, 1, 1, NULL, '2025-05-29 08:45:00', '2025-05-29 12:00:00', NULL, NULL, NULL, 'Validée', '2025-05-24 23:41:36', 2, '2025-05-24 23:48:00', NULL, NULL, NULL),
+(4, 3, 9, 1, NULL, '2025-05-28 10:30:00', '2025-05-28 15:45:00', NULL, NULL, NULL, 'Validée', '2025-05-24 23:42:02', 2, '2025-05-24 23:47:58', NULL, NULL, NULL),
+(5, 3, NULL, 1, 1, '2025-05-27 09:15:00', '2025-05-27 14:00:00', NULL, NULL, NULL, 'Validée', '2025-05-24 23:42:12', 2, '2025-05-24 23:47:53', NULL, NULL, NULL),
+(6, 3, NULL, 1, 1, '2025-05-28 10:30:00', '2025-05-28 13:30:00', NULL, NULL, NULL, 'Validée', '2025-05-24 23:47:20', 2, '2025-05-24 23:47:51', NULL, NULL, NULL),
+(7, 3, 2, 1, NULL, '2025-05-28 09:45:00', '2025-05-28 14:15:00', NULL, NULL, NULL, 'Validée', '2025-05-24 23:51:30', 2, '2025-05-25 00:26:10', NULL, NULL, NULL),
+(8, 2, NULL, 1, 1, '2025-05-29 11:00:00', '2025-05-29 14:15:00', NULL, NULL, NULL, 'Validée', '2025-05-25 00:25:43', 2, '2025-05-25 00:26:07', NULL, NULL, NULL),
+(9, 4, 1, 1, NULL, '2025-05-30 12:15:00', '2025-05-30 14:45:00', NULL, NULL, NULL, 'En attente', '2025-05-25 09:52:08', NULL, NULL, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -171,6 +219,14 @@ CREATE TABLE `salle` (
   `Equipements_Specifiques` text DEFAULT NULL COMMENT 'Liste des équipements fixes importants',
   `Est_Reservable` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'La salle peut-elle être réservée via l appli ?'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `salle`
+--
+
+INSERT INTO `salle` (`ID_Salle`, `Nom_Salle`, `Type_Salle`, `Capacite`, `Equipements_Specifiques`, `Est_Reservable`) VALUES
+(1, 'Salle 138', 'Salle de cours', 30, NULL, 1),
+(2, 'Salle 212', 'Salle de cours', 30, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -198,7 +254,9 @@ CREATE TABLE `utilisateur` (
 
 INSERT INTO `utilisateur` (`ID_Utilisateur`, `Email`, `Pseudo`, `Nom`, `Prenom`, `Mot_de_passe`, `Date_Naissance`, `Adresse_Postale`, `Role`, `Est_Actif`, `Date_Inscription`) VALUES
 (2, 'b.raphaelmail@gmail.com', 'raphael.boullard', 'BOULLARD', 'Raphael', '$2y$10$iS7sguFf1MHgexSoD5a.QuiYB8l5YyuF6Mglj4/4SN4qQgjme3Id2', NULL, NULL, 'Administrateur', 1, '2025-05-24 12:24:26'),
-(3, 'gotty@gmail.com', 'bordel', 'Boulbi', 'Fejj', '$2y$10$CUy9zOJ.mv76DlfiICjTg.ffLegg1TjMlaCWOwy3f4o5HNaFqBJO.', NULL, NULL, 'Etudiant', 1, '2025-05-24 14:43:09');
+(3, 'gotty@gmail.com', 'bordel', 'Boulbi', 'Fejj', '$2y$10$CUy9zOJ.mv76DlfiICjTg.ffLegg1TjMlaCWOwy3f4o5HNaFqBJO.', NULL, NULL, 'Etudiant', 1, '2025-05-24 14:43:09'),
+(4, 'Sunshine@gmail.com', 'Otto', 'Fred', 'John', '$2y$10$0vfMGduszlN.QrZvjMvNi.IJFOTPgOC.WfHkc3THvkkEjm7hsAQ4O', NULL, NULL, 'Enseignant', 1, '2025-05-25 09:08:33'),
+(5, 'Sun@gmail.com', 'Gottop', 'Prismatique', 'Salazar', '$2y$10$gTfdPMa5Nqc1WOa9HhZXIeTMCl4E7nWlTiSNWxOrvWHL60TAxoFLy', NULL, NULL, 'Agent', 1, '2025-05-25 09:21:45');
 
 --
 -- Index pour les tables déchargées
@@ -296,7 +354,7 @@ ALTER TABLE `consultation_reservation_agent`
 -- AUTO_INCREMENT pour la table `materiel`
 --
 ALTER TABLE `materiel`
-  MODIFY `ID_Materiel` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Materiel` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `message`
@@ -308,19 +366,19 @@ ALTER TABLE `message`
 -- AUTO_INCREMENT pour la table `reservation`
 --
 ALTER TABLE `reservation`
-  MODIFY `ID_Reservation` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Reservation` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `salle`
 --
 ALTER TABLE `salle`
-  MODIFY `ID_Salle` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Salle` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateur`
 --
 ALTER TABLE `utilisateur`
-  MODIFY `ID_Utilisateur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_Utilisateur` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Contraintes pour les tables déchargées

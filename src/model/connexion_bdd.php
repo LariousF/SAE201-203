@@ -1,7 +1,5 @@
 <?php
-// Ne pas démarrer une nouvelle session ici car elle est déjà démarrée dans les fichiers qui incluent celui-ci
 
-// Définir les chemins de base s'ils ne sont pas déjà définis
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/Clone/SAE201-203');
 }
