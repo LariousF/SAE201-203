@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!empty($email) && !empty($password)) {
         try {
             // Recherche de l'utilisateur par email avec son rôle effectif
-            $stmt = $pdo->prepare("
+            $stmt = $connexion->prepare("
                 SELECT u.*, 
                     CASE 
                         WHEN e.ID_Utilisateur IS NOT NULL THEN 'Etudiant'

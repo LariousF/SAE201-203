@@ -1,7 +1,11 @@
 <?php
 require_once '../src/model/connexion_bdd.php';
 require_once '../src/model/Salle.php';
+require_once '../src/model/authentification.php';
 
+$auth = new Authentification($connexion);
+$isLoggedIn = $auth->isLoggedIn();
+$isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Administrateur';
 $salleModel = new Salle($connexion);
 $salles = $salleModel->getAllSalles();
 
@@ -44,9 +48,16 @@ ksort($sallesParEtage);
                                 <i class="bi bi-person-fill"></i> PROFIL
                             </a>
                         </li>
+                        <?php if ($isAdmin): ?>
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-gear-fill"></i> Tableau de bord Admin
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-person-fill"></i> Tableau de bord Admin
+                            <a href="deconnexion.php" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-box-arrow-right"></i> Déconnexion
                             </a>
                         </li>
                     </ul>

@@ -1,9 +1,13 @@
 <?php
 require_once '../src/model/connexion_bdd.php';
 require_once '../src/model/Materiel.php';
+require_once '../src/model/authentification.php';
+
 
 $materielModel = new Materiel($connexion);
 $materielsVR = $materielModel->getMaterielVR();
+$isLoggedIn = $auth->isLoggedIn();
+$isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Administrateur';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -36,9 +40,16 @@ $materielsVR = $materielModel->getMaterielVR();
                                 <i class="bi bi-person-fill"></i> PROFIL
                             </a>
                         </li>
+                        <?php if ($isAdmin): ?>
+                            <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                                <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-gear-fill"></i> Tableau de bord Admin
+                                </a>
+                            </li>
+                        <?php endif; ?>
                         <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                            <a href="adminboard.php" class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-person-fill"></i> Tableau de bord Admin
+                            <a href="deconnexion.php" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-box-arrow-right"></i> Déconnexion
                             </a>
                         </li>
                     </ul>

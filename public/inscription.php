@@ -98,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="">Sélectionnez un rôle</option>
                     <option value="Etudiant">Étudiant</option>
                     <option value="Enseignant">Enseignant</option>
+                    <option value="Agent">Agent</option>
                 </select>
             </div>
 
@@ -122,6 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label for="fonction" class="form-label">Fonction</label>
                     <input type="text" class="form-control" id="fonction" name="fonction">
+                </div>
+                <div class="mb-3">
+                    <label for="telephone_pro_enseignant" class="form-label">Numéro de téléphone professionnel</label>
+                    <input type="text" class="form-control" id="telephone_pro_enseignant" name="telephone_pro_enseignant">
                 </div>
             </div>
 

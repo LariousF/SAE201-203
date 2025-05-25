@@ -82,14 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'Enseignant':
             $qualification = trim($_POST['qualification'] ?? '');
             $fonction = trim($_POST['fonction'] ?? '');
+            $telephone_pro = trim($_POST['telephone_pro'] ?? '');
             if (empty($qualification)) { $errors[] = "La qualification est requise."; $specific_fields_valid = false;}
+            if (empty($telephone_pro)) { $errors[] = "Le téléphone professionnel est requis."; $specific_fields_valid = false;}
             if (empty($fonction)) { $errors[] = "La fonction est requise."; $specific_fields_valid = false;}
             break;
         case 'Administrateur':
-            $bureau = trim($_POST['bureau'] ?? '');
-            $telephone_pro = trim($_POST['telephone_pro'] ?? '');
+            $bureau = trim($_POST['bureau'] ?? '');         
             if (empty($bureau)) { $errors[] = "Le bureau est requis."; $specific_fields_valid = false;}
-            if (empty($telephone_pro)) { $errors[] = "Le téléphone professionnel est requis."; $specific_fields_valid = false;}
             break;
         case 'Agent':
             break;
@@ -136,12 +136,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
                 break;
             case 'Enseignant':
-                $sqlRole = "INSERT INTO Enseignant (ID_Utilisateur, Qualification, Fonction) VALUES (:id_utilisateur, :qualification, :fonction)";
+                $sqlRole = "INSERT INTO Enseignant (ID_Utilisateur, Qualification, Fonction, Telephone_pro_enseignant) VALUES (:id_utilisateur, :qualification, :fonction, :tel_pro)";
                 $stmtRole = $pdo->prepare($sqlRole);
                 $stmtRole->execute([
                     ':id_utilisateur' => $id_utilisateur,
                     ':qualification' => $qualification,
-                    ':fonction' => $fonction
+                    ':fonction' => $fonction,
+                    ':tel_pro_enseignant' => $telephone_pro_enseignant
                 ]);
                 break;
             case 'Administrateur':

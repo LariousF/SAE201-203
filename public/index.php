@@ -2,7 +2,7 @@
 require_once '../src/model/db_connect.php';
 require_once '../src/model/authentification.php';
 
-// Vérifier si l'utilisateur est connecté
+$auth = new Authentification($connexion);
 $isLoggedIn = $auth->isLoggedIn();
 $isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Administrateur';
 ?>
