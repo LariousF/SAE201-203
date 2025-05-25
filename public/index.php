@@ -15,8 +15,12 @@ $isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'
     <meta name="description" content="Réservez facilement une salle, du matériel ou une autre ressource de l'IUT.">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css");
+    </style>
 </head>
 <body>
     <div class="bg-light">
@@ -162,9 +166,9 @@ $isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'
                     <div class="col-lg-3 col-md-6">
                         <h5>Suivez nous</h5>
                         <div class="d-flex gap-3">
-                            <a href="#" class="text-dark"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="text-dark"><i class="bi bi-twitter"></i></a>
-                            <a href="#" class="text-dark"><i class="bi bi-linkedin"></i></a>
+                            <a href="https://www.facebook.com/UniversiteGustaveEiffel/" class="text-dark" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+                            <a href="https://bsky.app/profile/univeiffel.bsky.social" class="text-dark" target="_blank" rel="noopener noreferrer"><i class="bi bi-bluesky"></i></a>
+                            <a href="https://www.linkedin.com/company/iut-de-marne-la-vallee/" class="text-dark" target="_blank" rel="noopener noreferrer"><i class="bi bi-linkedin"></i></a>
                         </div>
                     </div>
                 </div>

@@ -4,12 +4,6 @@ require_once '../src/model/authentification.php';
 
 $message = '';
 
-// Affichage temporaire pour débogage
-echo "<pre>";
-echo "Session actuelle : ";
-print_r($_SESSION);
-echo "</pre>";
-
 // Si l'utilisateur est déjà connecté, le rediriger vers l'accueil
 if ($auth->isLoggedIn()) {
     header('Location: index.php');
@@ -49,15 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $message_type = 'warning';
                 } else {
                     // Authentification réussie
-                $_SESSION['user_id'] = $utilisateur['ID_Utilisateur'];
-                $_SESSION['email'] = $utilisateur['Email'];
+                    $_SESSION['user_id'] = $utilisateur['ID_Utilisateur'];
+                    $_SESSION['email'] = $utilisateur['Email'];
                     $_SESSION['user_role'] = $utilisateur['Role_Effectif'];
                     $_SESSION['user_pseudo'] = $utilisateur['Pseudo'];
                     $_SESSION['user_nom'] = $utilisateur['Nom'];
                     $_SESSION['user_prenom'] = $utilisateur['Prenom'];
                     $_SESSION['est_actif'] = $utilisateur['Est_Actif'];
-                header("Location: index.php");
-                exit;
+                    header("Location: index.php");
+                    exit;
                 }
             } else {
                 $message = "Email ou mot de passe incorrect.";
@@ -81,18 +75,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page de Connexion</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/connexion.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-    <img class="w-25" src="./images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel">
+    <div class="logo-container position-fixed top-0 start-0 m-4">
+        <a href="index.php">
+            <img src="./images/logo_univ_gustave_eiffel.png" alt="Logo Université Gustave Eiffel" style="max-width: 200px;">
+        </a>
+    </div>
+    
     <div class="blue-bar"></div>
     
     <div class="form_container p-4 rounded shadow-sm">
         <h1 class="text-center mb-4">Connexion</h1>
         
         <?php if (!empty($message)): ?>
-            <div class="alert <?php echo strpos($message, 'réussie') !== false ? 'alert-success' : 'alert-danger'; ?> mb-3">
+            <div class="alert alert-<?php echo $message_type; ?> mb-3">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
             <div class="row">
                 <div class="col-6">
-                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                    <button type="submit" class="btn btn-custom-primary w-100">Se connecter</button>
                 </div>
                 <div class="col-6">
                     <a href="inscription.php" class="btn btn-outline-secondary w-100">S'inscrire</a>

@@ -82,7 +82,7 @@ if (!$auth->isLoggedIn()) {
                         <div class="row align-items-center">
                             <div class="col-md-3 text-center">
                                 <div class="profile-circle mb-3">
-                                    <img src="images/default-avatar.png" alt="Avatar" class="img-fluid">
+                                    <img src="images/blank.png" alt="Avatar" class="img-fluid">
                                 </div>
                             </div>
                             <div class="col-md-9 text-md-start text-center">
