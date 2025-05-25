@@ -1,3 +1,13 @@
+:root {
+	--iut-blue: #2a5d90;
+	--iut-dark-blue: #1e4b75;
+	--iut-light-blue: #4a90e2;
+	--iut-bg-light: #f5f5f5;
+	--iut-border-color: #dee2e6;
+	--iut-success: #d4edda;
+	--iut-error: #f8d7da;
+}
+
 body {
 	font-family: Arial, sans-serif;
 	min-height: 100vh;
@@ -249,13 +259,6 @@ footer {
 	}
 }
 
-/* Couleurs personnalisées */
-:root {
-	--iut-blue: #2a5d90;
-	--iut-light-blue: #3470ab;
-	--iut-dark-blue: #1e4b75;
-}
-
 /* Classes générales */
 .bg-iut-blue {
 	background-color: var(--iut-blue);
@@ -364,4 +367,30 @@ footer {
 	.info-grid {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* Styles pour le tableau de bord admin */
+.list-group-item.active {
+    background-color: var(--iut-blue) !important;
+    border-color: var(--iut-blue) !important;
+}
+
+.list-group-item-action:hover {
+    background-color: var(--iut-bg-light);
+}
+
+.list-group-item-action:focus {
+    background-color: var(--iut-light-blue);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .profile-circle {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
 }

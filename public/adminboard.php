@@ -103,7 +103,7 @@ if (isset($message)) {
                     <!-- Section Validation des Comptes -->
                     <div class="tab-pane fade show active" id="validation-comptes">
                         <div class="card">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header bg-iut-blue text-white">
                                 <h5 class="card-title mb-0">Validation des Comptes</h5>
                             </div>
                             <div class="card-body">
@@ -130,7 +130,7 @@ if (isset($message)) {
                     <!-- Section Gestion du Matériel -->
                     <div class="tab-pane fade" id="gestion-materiel">
                         <div class="card">
-                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <div class="card-header bg-iut-blue text-white d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">Gestion du Matériel</h5>
                                 <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#ajoutMaterielModal">
                                     <i class="bi bi-plus-lg"></i> Ajouter
@@ -160,7 +160,7 @@ if (isset($message)) {
                     <!-- Section Validation des Réservations -->
                     <div class="tab-pane fade" id="validation-reservations">
                         <div class="card">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header bg-iut-blue text-white">
                                 <h5 class="card-title mb-0">Validation des Réservations</h5>
                             </div>
                             <div class="card-body">
@@ -187,7 +187,7 @@ if (isset($message)) {
                     <!-- Section Retours Matériels -->
                     <div class="tab-pane fade" id="retours-materiels">
                         <div class="card">
-                            <div class="card-header bg-primary text-white">
+                            <div class="card-header bg-iut-blue text-white">
                                 <h5 class="card-title mb-0">Liste des Retours Matériels</h5>
                             </div>
                             <div class="card-body">

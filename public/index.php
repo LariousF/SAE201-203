@@ -110,7 +110,7 @@ $isAdmin = $isLoggedIn && isset($_SESSION['user_role']) && $_SESSION['user_role'
                 <div class="container">
                     <h2 class="text-center mb-4">Mes Réservations</h2>
                     <div class="card">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-iut-blue text-white">
                             <h5 class="card-title mb-0">État de mes demandes</h5>
                         </div>
                         <div class="card-body">
